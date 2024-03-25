@@ -19,7 +19,7 @@
     "http-server": "^14.1.1",
     "native-run": "^2.0.1",
     "@capacitor/assets": "^3.0.4",
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0"
+    "chai": "^5.1.0",
+    "mocha": "^10.3.0"
   }
 }
