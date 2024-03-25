@@ -1,0 +1,61 @@
+/* ------------------------------------------------------ */
+/*                       Main Page                        */
+/* ------------------------------------------------------ */
+
+button.add-tracker {
+    padding: 10px;
+    border-radius: 50%;
+    margin-top: 15px;
+}
+
+button.add-tracker > i {
+    height: 32px;
+    width: 32px;
+}
+
+/* ------------------------------------------------------ */
+/*                     Tracker Table                      */
+/* ------------------------------------------------------ */
+
+tr {
+    height: 45px;
+    min-height: 45px;
+}
+
+tr > td {
+    padding: 0;
+    min-width: 200px;
+    max-width: 300px;
+    border-radius: 2px;
+    border-bottom: 1px solid var(--faint-1);
+
+    background: linear-gradient(to left, var(--background) 50%, var(--faint-1) 50%) right;
+    background-size: 200%;
+}
+
+tr > td.active {
+    transition: 750ms ease-out;
+    transition-delay: 150ms;
+    background-position: left;
+}
+
+tr > td > button {
+    height: auto;
+    min-height: 44px;
+    text-align: left;
+    border-radius: 0;
+    background-color: transparent;
+    justify-content: left;
+    max-width: inherit;
+    width: 100%;
+    color: var(--font);
+}
+
+tr > td > button.active {
+    color: var(--focus-color);
+    background-color: var(--focus-background) !important;
+}
+
+tr > td > button:hover {
+    box-shadow: none;
+}

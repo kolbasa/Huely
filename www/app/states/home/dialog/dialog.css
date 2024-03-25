@@ -1,0 +1,45 @@
+/* ------------------------------------------------------ */
+/*                         Dialog                         */
+/* ------------------------------------------------------ */
+
+dialog {
+    width: 230px;
+}
+
+dialog > button.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+dialog > button.close-button > i {
+    background-color: var(--faint-1);
+}
+
+/* ------------------------------------------------------ */
+/*                          Form                          */
+/* ------------------------------------------------------ */
+
+form > label {
+    display: flex;
+    flex-direction: column;
+}
+
+form > label > input {
+    margin-top: 5px;
+}
+
+form > div.controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+form > div.controls > button {
+    max-width: inherit;
+    width: 100%;
+}
+
+form > div.controls > button > span {
+    margin: 0;
+}

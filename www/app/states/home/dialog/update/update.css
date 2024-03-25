@@ -1,0 +1,14 @@
+dialog > form > div.controls > button.delete {
+    width: auto;
+    margin-right: 10px;
+    background-color: #d30505;
+    color: white;
+}
+
+dialog > form > div.controls > button.delete:hover {
+    box-shadow: 0 0 0 1px #d30505, 0 0 3px 1px #d30505;
+}
+
+dialog > form > div.controls > button.delete > i.icon-trash {
+    background-color: var(--focus-color);
+}

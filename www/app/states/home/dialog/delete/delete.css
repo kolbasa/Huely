@@ -1,0 +1,18 @@
+dialog {
+    display: flex;
+    flex-direction: column;
+}
+
+dialog > div.controls > button {
+    max-width: inherit;
+    width: 100%;
+}
+
+dialog > div.controls > button.delete {
+    background-color: #d30505;
+    color: var(--focus-color);
+}
+
+dialog > div.controls > button.abort {
+    margin-top: 15px;
+}

@@ -1,0 +1,299 @@
+/* ------------------------------------------------------ */
+/*                         themes                         */
+/* ------------------------------------------------------ */
+
+@media (prefers-color-scheme: dark) {
+    html {
+        --focus-color: #EEEEEE;
+        --focus-background: #30a14e !important;
+        --focus-font: #40c463 !important;
+
+        --faint-1: #5E5E5E;
+        --faint-2: #CCCCCC;
+        --box-shadow: #5E5E5E;
+
+        --font: #CCCCCC;
+        --background: #000000;
+
+        --form-font: #2B2B2B;
+        --form-background: #FFFFFF;
+
+        --invert: 100%;
+
+        --button-hover-shadow: 0 0 0 1px var(--background), 0 0 1px 3px var(--focus-background);
+        --hightlighted-button-hover-shadow: 0 0 0 1px var(--faint-1);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html {
+        --focus-color: #FFFFFF;
+        --focus-background: #40c463 !important;
+        --focus-font: #30a14e !important;
+
+        --faint-1: #ECECEC;
+        --faint-2: #CCCCCC;
+        --box-shadow: #CCCCCC;
+
+        --font: #2B2B2B;
+        --background: #FFFFFF;
+
+        --form-font: #2B2B2B;
+        --form-background: #E8E8E8;
+
+        --invert: 20%;
+
+        --button-hover-shadow: 0 0 0 1px var(--focus-background);
+        --hightlighted-button-hover-shadow: 0 0 0 1px var(--faint-2), 0 0 3px 1px var(--focus-background);
+    }
+}
+
+/* ------------------------------------------------------ */
+/*                    general settings                    */
+/* ------------------------------------------------------ */
+
+html {
+    height: 100%;
+    line-height: 1.15;
+    cursor: default;
+    font-family: sans-serif;
+    background-color: var(--background);
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    color: var(--font);
+    overflow-x: hidden;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+body, button, input, select, textarea {
+    font-size: medium;
+    line-height: 1.15;
+}
+
+label {
+    font-size: large;
+}
+
+/* ------------------------------------------------------ */
+/*                         dialog                         */
+/* ------------------------------------------------------ */
+
+.dialog {
+    background-color: var(--background);
+    color: var(--font);
+    padding: 20px;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 8px;
+    border-color: var(--box-shadow);
+    border-width: 1px;
+}
+
+/* ------------------------------------------------------ */
+/*                       mono icons                       */
+/* ------------------------------------------------------ */
+
+.icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: var(--font);
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    mask-image: var(--icon-path);
+    -webkit-mask-image: var(--icon-path);
+}
+
+.icon-add {
+    --icon-path: url(../assets/icons/add.svg);
+}
+
+.icon-trash {
+    --icon-path: url(../assets/icons/trash.svg);
+}
+
+.icon-caret-left {
+    --icon-path: url(../assets/icons/caret-left.svg);
+}
+
+.icon-x {
+    --icon-path: url(../assets/icons/close.svg);
+}
+
+/* ------------------------------------------------------ */
+/*                         texts                          */
+/* ------------------------------------------------------ */
+
+.bold {
+    font-weight: bold;
+}
+
+/* ------------------------------------------------------ */
+/*                         tables                         */
+/* ------------------------------------------------------ */
+
+table {
+    text-align: left;
+    display: block;
+    border-spacing: 0 0;
+}
+
+/* ------------------------------------------------------ */
+/*                         forms                          */
+/* ------------------------------------------------------ */
+
+form > label,
+form > label > input {
+    width: 100%;
+    color: var(--font);
+    background-color: var(--background);
+}
+
+form > label > input {
+    height: 35px;
+    padding-left: 10px;
+    border: 1px solid var(--box-shadow);
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+/* ------------------------------------------------------ */
+/*                       centering                        */
+/* ------------------------------------------------------ */
+
+.c1 {
+    display: table;
+}
+
+.c1 > .c2 {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.c1 > .c2 > .c3 {
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    max-width: 300px;
+}
+
+/* ------------------------------------------------------ */
+/*                        buttons                         */
+/* ------------------------------------------------------ */
+
+button {
+    border-radius: 6px;
+    outline: none;
+
+    border: 0;
+    padding: 8px 10px;
+
+    max-width: 200px;
+    color: var(--form-font);
+    background-color: var(--form-background);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button > span {
+    margin-left: 5px;
+}
+
+button:disabled {
+    box-shadow: none !important;
+    filter: invert(30%);
+}
+
+button:hover {
+    box-shadow: var(--button-hover-shadow);
+}
+
+button.highlight:hover {
+    box-shadow: var(--hightlighted-button-hover-shadow);
+}
+
+button.highlight,
+button.icon-button:hover {
+    background-color: var(--focus-background);
+    color: var(--focus-color);
+}
+
+/* ----------------------- icons ------------------------ */
+
+button.highlight > i.icon,
+button.icon-button:hover > i.icon {
+    background-color: var(--focus-color);
+}
+
+button.icon-button {
+    padding: 0;
+
+    box-shadow: none;
+    background: transparent;
+
+    border-radius: 6px;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* -------------------- back button --------------------- */
+
+button.back-button {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    padding: 2px;
+    background-color: var(--background);
+}
+
+button.icon-button > i.icon-caret-left {
+    height: 32px;
+    width: 32px;
+}
+
+/* ------------------------------------------------------ */
+/*                       scrollbar                        */
+/* ------------------------------------------------------ */
+
+::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: var(--faint-1);
+    border: 5px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--faint-2);
+}
+
+::-webkit-scrollbar-corner {
+    display: none;
+}

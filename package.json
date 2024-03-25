@@ -1,0 +1,25 @@
+{
+  "name": "huely",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "server": "npx http-server ./www -c-1 -o",
+    "icons": "npx @capacitor/assets generate --iconBackgroundColor '#fff' --iconBackgroundColorDark '#000' --splashBackgroundColor '#fff' --splashBackgroundColorDark '#000'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Michael Jedich",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^5.7.4",
+    "@capacitor/app": "^5.0.7",
+    "@capacitor/cli": "^5.7.4",
+    "@capacitor/core": "^5.7.4",
+    "http-server": "^14.1.1",
+    "native-run": "^2.0.1",
+    "@capacitor/assets": "^3.0.4",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  }
+}

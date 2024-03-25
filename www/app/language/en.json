@@ -1,0 +1,11 @@
+{
+  "APPLY": "Apply",
+  "CANCEL": "Cancel",
+  "CONFIRM_DELETE": "Delete permanently",
+  "CREATE": "Create",
+  "ERROR_OCCURRED": "Error occurred",
+  "LESS": "Less",
+  "MORE": "More",
+  "NAME": "Name",
+  "UNEXPECTED_ERROR_OCCURRED": "Unexpected errors occurred"
+}

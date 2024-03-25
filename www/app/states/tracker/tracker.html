@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title class="title">{{name}}</title>
+        <link rel="icon" type="image/x-icon" href="../../../assets/favicon.ico">
+        <link rel="stylesheet" href="../../../app/app.css">
+        <link rel="stylesheet" href="../../../app/states/tracker/tracker.css">
+        <script src="../../../app/states/tracker/tracker.js" type="module"></script>
+    </head>
+    
+    <body class="c1 hidden">
+        
+        <div class="c2">
+            
+            <div class="c3">
+                
+                <button class="back-button icon-button" onclick="goToTrackerList();">
+                    <i class="icon icon-caret-left"></i>
+                </button>
+                
+                <div class="tracker bold">
+                    {{name}}
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="weekday hidden" colspan="{{colspan}}">
+                                {{name}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="week hidden">
+                            <td class="day hidden {{date}}" onclick="onSelect(this)">
+                                {{day}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="color-picker hidden">
+                    <div class="date">{{date}}</div>
+                    <div class="controls">
+                        <div lang="LESS"></div>
+                        <div class="color" onclick="fill()"></div>
+                        <div class="color fill-1" onclick="fill(1)"></div>
+                        <div class="color fill-2" onclick="fill(2)"></div>
+                        <div class="color fill-3" onclick="fill(3)"></div>
+                        <div class="color fill-4" onclick="fill(4)"></div>
+                        <div lang="MORE"></div>
+                    </div>
+                </div>
+            
+            </div>
+        
+        </div>
+    
+    </body>
+
+</html>

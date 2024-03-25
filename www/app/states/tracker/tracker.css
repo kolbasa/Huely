@@ -1,0 +1,141 @@
+/* ------------------------------------------------------ */
+/*                         Header                         */
+/* ------------------------------------------------------ */
+
+button.back-button {
+    position: fixed;
+    top: 3px;
+    left: 3px;
+}
+
+button.back-button > i {
+    background-color: var(--faint-1);
+}
+
+div.tracker {
+    text-align: center;
+    margin-top: 3px;
+    color: var(--faint-1);
+}
+
+/* ------------------------------------------------------ */
+/*                         Colors                         */
+/* ------------------------------------------------------ */
+
+@media (prefers-color-scheme: dark) {
+    html {
+        --fill-0: #262626;
+        --fill-1: #216e39;
+        --fill-2: #30a14e;
+        --fill-3: #40c463;
+        --fill-4: #9be9a8;
+        --outline: #464646;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html {
+        --fill-0: #ECECEC;
+        --fill-1: #9be9a8;
+        --fill-2: #40c463;
+        --fill-3: #30a14e;
+        --fill-4: #216e39;
+        --outline: #d9d9d9;
+        --faint-1: #656565;
+    }
+}
+
+.fill-1 {
+    background: var(--fill-1) !important;
+    outline-color: var(--fill-1) !important;
+}
+
+.fill-2 {
+    background: var(--fill-2) !important;
+    outline-color: var(--fill-2) !important;
+}
+
+.fill-3 {
+    background: var(--fill-3) !important;
+    outline-color: var(--fill-3) !important;
+}
+
+.fill-4 {
+    background: var(--fill-4) !important;
+    outline-color: var(--fill-4) !important;
+}
+
+/* ------------------------------------------------------ */
+/*                         Table                          */
+/* ------------------------------------------------------ */
+
+table {
+    font-size: 14px;
+    margin-top: 5px;
+    border-spacing: 6px;
+}
+
+table > thead > tr > th {
+    font-weight: normal;
+}
+
+table > tbody > tr > td {
+    border-radius: 5px;
+    margin: 2px;
+    width: 20px;
+    height: 20px;
+}
+
+table > tbody > tr > td.active {
+    outline: 1px solid var(--outline);
+    background: var(--fill-0);
+}
+
+table > tbody > tr > td.selected {
+    outline-color: red;
+    box-shadow: 0 0 0 1px red
+}
+
+table > tbody > tr > td:last-of-type {
+    color: transparent;
+}
+
+/* ------------------------------------------------------ */
+/*                      Color Picker                      */
+/* ------------------------------------------------------ */
+
+div.color-picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 10px;
+    position: absolute;
+    outline: 1px solid var(--faint-1);
+    border-radius: 8px;
+    height: 50px;
+    min-width: 200px;
+    max-width: 400px;
+    bottom: 0;
+    background: var(--background);
+}
+
+div.color-picker > div.controls {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.color-picker > div.controls > div {
+    margin: 0 5px;
+}
+
+div.color-picker > div.controls > div.color {
+    background: var(--fill-0);
+    outline: 1px solid var(--outline);
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+}
