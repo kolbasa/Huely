@@ -10,6 +10,14 @@
   "keywords": [],
   "author": "Michael Jedich",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolbasa/huely.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kolbasa/huely/issues"
+  },
+  "homepage": "https://github.com/kolbasa/huely",
   "dependencies": {
     "@capacitor/android": "^5.7.4",
     "@capacitor/app": "^5.0.7",

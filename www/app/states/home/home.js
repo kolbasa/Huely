@@ -1,11 +1,11 @@
 await import('../../app.js');
 
 const {dom} = await import('../../../api/dom.js');
-const {language} = await import('../../../api/language.js');
 const {state} = await import('../../../api/routing/state.js');
-const {states} = await import('../states.js');
+const {states} = await import('../../../app/states/states.js');
 const {router} = await import('../../../api/routing/router.js');
 const {trackers} = await import('../../database/trackers.js');
+const {language} = await import('../../../api/language.js');
 
 /* ------------------------------------------------------ */
 /*                      Tracker List                      */
@@ -29,10 +29,9 @@ const refreshList = async () => {
  * @returns {void}
  */
 const backButtonListener = () => {
-    if (window.Capacitor == null) {
-        return;
+    if (window.Capacitor != null) {
+        window.Capacitor.addListener('App', 'backButton', closeModal);
     }
-    window.Capacitor.addListener('App', 'backButton', closeModal);
 };
 
 /**

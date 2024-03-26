@@ -1,9 +1,9 @@
 await import('../../app.js');
 
 const {dom} = await import('../../../api/dom.js');
-const {string} = await import('../../../api/string.js');
 const {state} = await import('../../../api/routing/state.js');
-const {states} = await import('../states.js');
+const {states} = await import('../../../app/states/states.js');
+const {string} = await import('../../../api/string.js');
 const {router} = await import('../../../api/routing/router.js');
 const {trackers} = await import('../../database/trackers.js');
 const {dateUtils} = await import('../../../api/date.js');
@@ -165,15 +165,16 @@ const addCell = (week, day) => {
     const isActive = week[day - 1] != null;
     let date = '';
     if (isActive) {
-        date = week[day - 1].toISOString().split('T')[0];
+        date = dateUtils.isoDateWithoutTime(week[day - 1]);
     }
     return `${date}${isActive ? ' active' : ''}`;
 };
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const renderTable = () => {
+const renderTable = async () => {
+    renderHeader();
     generateRowTemplate();
     const weeks = generateYear();
     let rowFiller = {};
@@ -182,6 +183,7 @@ const renderTable = () => {
         rowFiller[`date-${day}`] = (weekIndex) => addCell(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
+    await loadTracker();
 };
 
 /**
@@ -190,11 +192,35 @@ const renderTable = () => {
 window.load = async () => {
     backButtonListener();
     bodyClickListener();
+    resumeListener();
+    await renderTable();
+};
 
-    renderHeader();
-    renderTable();
+/* ------------------------------------------------------ */
+/*                       On Resume                        */
+/* ------------------------------------------------------ */
 
-    await loadTracker();
+/**
+ * @param {{isActive: boolean}} status
+ * @returns {Promise<void>}
+ */
+const onResume = async (status) => {
+    if (status == null || !status.isActive) {
+        return;
+    }
+    const cell = dom.element(dateUtils.isoDateWithoutTime(new Date()));
+    if (cell == null) { // a new day has begun.
+        await renderTable();
+    }
+};
+
+/**
+ * @returns {void}
+ */
+const resumeListener = () => {
+    if (window.Capacitor != null) {
+        window.Capacitor.addListener('App', 'appStateChange', onResume);
+    }
 };
 
 /* ------------------------------------------------------ */
@@ -357,8 +383,7 @@ const onBackButton = async () => {
  * @returns {void}
  */
 const backButtonListener = () => {
-    if (window.Capacitor == null) {
-        return;
+    if (window.Capacitor != null) {
+        window.Capacitor.addListener('App', 'backButton', onBackButton);
     }
-    window.Capacitor.addListener('App', 'backButton', onBackButton);
 };

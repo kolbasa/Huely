@@ -48,7 +48,7 @@ const add = async (name) => {
 const update = async (tracker) => {
     let trackers = await remove(tracker);
     trackers.push(tracker);
-    await serialize(trackers)
+    await serialize(trackers);
     return trackers;
 };
 

@@ -34,7 +34,15 @@ export const dateUtils = {
      * @returns {string}
      */
     localizedWeekday: (date) => {
-        return new Date(date).toLocaleString('default', {weekday: 'short'})
+        return new Date(date).toLocaleString('default', {weekday: 'short'});
+    },
+
+    /**
+     * @param {Date} date
+     * @returns {string}
+     */
+    isoDateWithoutTime: (date) => {
+        return date.toISOString().split('T')[0];
     },
 
     /**
