@@ -23,7 +23,7 @@ let tracker = undefined;
 const loadTracker = async () => {
     const params = await state.getParams();
     tracker = (await trackers.list())[params.tracker];
-    dom.set('tracker', 'name', string.truncateText(tracker.name, 30));
+    dom.set('tracker', 'name', tracker.name);
     dom.set('title', 'name', tracker.name);
     for (let date in tracker.dates) {
         dom.addClass(date, `fill-${tracker.dates[date]}`);
@@ -277,15 +277,15 @@ window.fill = async (type) => {
 };
 
 /**
- * @param {HTMLElement} attachTo
+ * @param {HTMLElement} cell
  * @returns {void}
  */
-const createPopover = (attachTo) => {
+const createPopover = (cell) => {
 
     /**
      * @type {string}
      */
-    let date = getElementDate(attachTo);
+    let date = getElementDate(cell);
 
     /**
      * @type {HTMLElement}
@@ -293,8 +293,20 @@ const createPopover = (attachTo) => {
     const picker = dom.element('color-picker');
     dom.set('color-picker', 'date', dateUtils.formatDate(date));
 
-    const offset = attachTo.offsetTop < (window.innerHeight / 2) ? 72 : -44;
-    picker.style.top = `${attachTo.offsetTop + offset}px`;
+    const cellHeight = 22;
+    const popoverHeight = 70;
+    const popoverMargin = 15;
+
+    const screenCenter = window.innerHeight / 2;
+    const topHalfScreen = cell.offsetTop < screenCenter;
+
+    const offsetTopHalfScreen = cellHeight + popoverMargin;
+    const offsetBottomHalfScreen = -(popoverHeight + popoverMargin);
+
+    const popoverOffset = topHalfScreen ? offsetTopHalfScreen : offsetBottomHalfScreen;
+
+    const cellOffsetTop = cell.getBoundingClientRect().top + window.scrollY;
+    picker.style.top = `${cellOffsetTop + popoverOffset}px`;
     dom.show('color-picker');
 };
 

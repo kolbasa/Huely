@@ -3,8 +3,7 @@
 /* ------------------------------------------------------ */
 
 button.back-button {
-    position: fixed;
-    top: 3px;
+    top: calc(env(safe-area-inset-top) + 3px);
     left: 3px;
 }
 
@@ -70,8 +69,9 @@ div.tracker {
 /* ------------------------------------------------------ */
 
 table {
-    font-size: 14px;
     margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
     border-spacing: 6px;
 }
 
@@ -92,8 +92,7 @@ table > tbody > tr > td.active {
 }
 
 table > tbody > tr > td.selected {
-    outline-color: red;
-    box-shadow: 0 0 0 1px red
+    box-shadow: 0 0 0 3px red
 }
 
 table > tbody > tr > td:last-of-type {

@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "server": "npx http-server ./www -c-1 -o",
-    "icons": "npx @capacitor/assets generate --iconBackgroundColor '#fff' --iconBackgroundColorDark '#000' --splashBackgroundColor '#fff' --splashBackgroundColorDark '#000'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "icons": "npx @capacitor/assets generate --iconBackgroundColor '#fff' --iconBackgroundColorDark '#000' --splashBackgroundColor '#fff' --splashBackgroundColorDark '#000'"
   },
   "keywords": [],
   "author": "Michael Jedich",
@@ -14,12 +13,15 @@
   "dependencies": {
     "@capacitor/android": "^5.7.4",
     "@capacitor/app": "^5.0.7",
+    "@capacitor/assets": "^3.0.4",
     "@capacitor/cli": "^5.7.4",
     "@capacitor/core": "^5.7.4",
-    "http-server": "^14.1.1",
-    "native-run": "^2.0.1",
-    "@capacitor/assets": "^3.0.4",
+    "@capacitor/ios": "^5.7.4"
+  },
+  "devDependencies": {
     "chai": "^5.1.0",
-    "mocha": "^10.3.0"
+    "http-server": "^14.1.1",
+    "mocha": "^10.3.0",
+    "native-run": "^2.0.1"
   }
 }
