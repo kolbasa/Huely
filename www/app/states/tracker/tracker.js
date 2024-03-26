@@ -365,6 +365,7 @@ window.onSelect = async (element) => {
  * @returns {Promise<void>}
  */
 window.goToTrackerList = async () => {
+    dom.hide('c1');
     await router.go(states.START);
 };
 

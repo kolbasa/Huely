@@ -237,7 +237,7 @@ function addLongPressEventListener(tracker, index) {
  * @returns {Promise<void>}
  */
 window.openTracker = async (index) => {
-    dom.addClass(`t${index}`, 'active');
+    dom.hide('c1');
     await router.go(states.TRACKER, {tracker: index});
 };
 

@@ -51,11 +51,6 @@ tr > td > button {
     color: var(--font);
 }
 
-tr > td > button.active {
-    color: var(--focus-color);
-    background-color: var(--focus-background) !important;
-}
-
 tr > td > button:hover {
     box-shadow: none;
 }
