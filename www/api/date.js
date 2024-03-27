@@ -5,8 +5,13 @@ export const dateUtils = {
      */
     firstDayInWeek: () => {
         const lang = window.navigator.language;
-        const firstDay = new Intl.Locale(lang)['weekInfo']['firstDay'];
-        if (firstDay === 7) {
+        let firstDay = 0;
+        try {
+            firstDay = new Intl.Locale(lang)['weekInfo']['firstDay'];
+        } catch (err) {
+            //
+        }
+        if (firstDay > 6) {
             return 0;
         }
         return firstDay;

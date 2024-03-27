@@ -1,7 +1,7 @@
 {
   "name": "huely",
   "version": "1.0.0",
-  "description": "Huely is a simple habit tracking app for Android and iOS",
+  "description": "Huely is a simple habit tracker app for Android and iOS",
   "type": "module",
   "scripts": {
     "server": "npx http-server ./www -c-1 -o",
