@@ -39,7 +39,7 @@ export const dateUtils = {
      * @returns {string}
      */
     localizedWeekday: (date) => {
-        return new Date(date).toLocaleString('default', {weekday: 'short'});
+        return new Date(date).toLocaleString(window.navigator.language, {weekday: 'short'});
     },
 
     /**

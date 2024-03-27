@@ -147,7 +147,7 @@ const addMonthLabel = (week, day) => {
     let month = '';
     week.forEach((day) => {
         if (day.getDate() === 1) {
-            month = day.toLocaleString('default', {month: 'short'});
+            month = day.toLocaleString(window.navigator.language, {month: 'short'});
         }
     });
     return month;
