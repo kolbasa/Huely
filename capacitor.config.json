@@ -4,5 +4,11 @@
   "webDir": "www",
   "server": {
     "androidScheme": "https"
+  },
+  "android": {
+    "loggingBehavior": "production",
+    "buildOptions": {
+      "signingType": "jarsigner"
+    }
   }
 }
