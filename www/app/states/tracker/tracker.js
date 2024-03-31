@@ -118,6 +118,10 @@ const generateYear = () => {
         week.unshift(day);
     });
 
+    if (weeks[0].length === 0) {
+        weeks.shift();
+    }
+
     return weeks;
 };
 
@@ -365,7 +369,8 @@ window.onSelect = async (element) => {
  * @returns {Promise<void>}
  */
 window.goToTrackerList = async () => {
-    dom.hide('c1');
+    dom.hide('c3');
+    dom.show('loading');
     await router.go(states.START);
 };
 

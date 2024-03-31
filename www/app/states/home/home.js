@@ -30,7 +30,16 @@ const refreshList = async () => {
  */
 const backButtonListener = () => {
     if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'backButton', closeModal);
+        window.Capacitor.addListener('App', 'backButton', window.closeModal);
+    }
+};
+
+/**
+ * @returns {void}
+ */
+const stateChangeListener = () => {
+    if (window.Capacitor != null) {
+        window.Capacitor.addListener('App', 'appStateChange', window.closeModal);
     }
 };
 
@@ -40,6 +49,7 @@ const backButtonListener = () => {
 window.load = async () => {
     await refreshList();
     backButtonListener();
+    stateChangeListener();
 };
 
 /* ------------------------------------------------------ */
@@ -237,7 +247,8 @@ function addLongPressEventListener(tracker, index) {
  * @returns {Promise<void>}
  */
 window.openTracker = async (index) => {
-    dom.hide('c1');
+    dom.hide('c3');
+    dom.show('loading');
     await router.go(states.TRACKER, {tracker: index});
 };
 

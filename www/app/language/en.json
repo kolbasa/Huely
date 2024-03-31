@@ -7,5 +7,6 @@
   "LESS": "Less",
   "MORE": "More",
   "NAME": "Name",
-  "UNEXPECTED_ERROR_OCCURRED": "Unexpected errors occurred"
+  "UNEXPECTED_ERROR_OCCURRED": "Unexpected errors occurred",
+  "PLEASE_WAIT": "Please wait.."
 }
