@@ -1,7 +1,6 @@
 await import('../../app.js');
 
 const {dom} = await import('../../../api/dom.js');
-const {state} = await import('../../../api/routing/state.js');
 const {states} = await import('../../../app/states/states.js');
 const {router} = await import('../../../api/routing/router.js');
 const {trackers} = await import('../../database/trackers.js');
@@ -26,11 +25,42 @@ const refreshList = async () => {
 };
 
 /**
+ * @param {string} locale
+ */
+const showToast = (locale) => {
+    if (window.Capacitor != null) {
+        window.Capacitor.Plugins.Toast.show({text: language.translate(locale)});
+    }
+};
+
+let waitingFor;
+
+/**
+ * @returns {void}
+ */
+const onBackButton = async () => {
+    if (removeDialog != null) {
+        window.closeModal();
+        return;
+    }
+
+    showToast('PRESS_AGAIN_TO_EXIT');
+
+    if (waitingFor != null) {
+        return window.Capacitor.Plugins.App.exitApp()
+    }
+
+    waitingFor = setTimeout(() => {
+        waitingFor = null;
+    }, 1500);
+};
+
+/**
  * @returns {void}
  */
 const backButtonListener = () => {
     if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'backButton', window.closeModal);
+        window.Capacitor.addListener('App', 'backButton', onBackButton);
     }
 };
 
@@ -252,8 +282,9 @@ window.openTracker = async (index) => {
     await router.go(states.TRACKER, {tracker: index});
 };
 
-const params = await state.getParams();
-if (params != null && params['tracker'] != null) {
-    await window.openTracker(params['tracker']);
-    delete window.load;
-}
+// const {state} = await import('../../../api/routing/state.js');
+// const params = await state.getParams();
+// if (params != null && params['tracker'] != null) {
+//     await window.openTracker(params['tracker']);
+//     delete window.load;
+// }

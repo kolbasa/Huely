@@ -1,6 +1,6 @@
 {
   "name": "huely",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Huely is a simple habit tracker app for Android and iOS",
   "type": "module",
   "scripts": {
@@ -19,14 +19,16 @@
   },
   "homepage": "https://github.com/kolbasa/huely",
   "dependencies": {
-    "@capacitor/android": "^5.7.4",
-    "@capacitor/app": "^5.0.7",
+    "@capacitor/android": "next",
+    "@capacitor/app": "next",
     "@capacitor/assets": "^3.0.4",
-    "@capacitor/cli": "^5.7.4",
-    "@capacitor/core": "^5.7.4",
-    "@capacitor/ios": "^5.7.4"
+    "@capacitor/core": "next",
+    "@capacitor/haptics": "^6.0.2",
+    "@capacitor/ios": "next",
+    "@capacitor/toast": "next"
   },
   "devDependencies": {
+    "@capacitor/cli": "next",
     "chai": "^5.1.0",
     "http-server": "^14.1.1",
     "mocha": "^10.3.0",

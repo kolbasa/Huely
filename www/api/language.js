@@ -7,9 +7,9 @@ const LANG_ATTR = 'lang';
 const DEFAULT = LANGUAGE.ENGLISH;
 
 /**
- * @returns {LANGUAGE}
+ * @type {LANGUAGE}
  */
-const getSystemLanguage = () => {
+const userLanguage = (() => {
     const language = window.navigator.language;
     if (language == null) {
         return DEFAULT;
@@ -21,7 +21,15 @@ const getSystemLanguage = () => {
         }
     }
     return DEFAULT;
-};
+})();
+
+/**
+ * @type {Object.<string,string>}
+ */
+const locales = await (async () => {
+    const request = await fetch(`/app/language/${userLanguage}.json`);
+    return await request.json();
+})();
 
 /**
  * @param {LANGUAGE} lang
@@ -32,15 +40,6 @@ const setAppLanguageName = (lang) => {
     if (htmlEl.lang === '{{lang}}') {
         htmlEl.setAttribute(LANG_ATTR, lang);
     }
-};
-
-/**
- * @param {LANGUAGE} lang
- * @returns {Promise<Object.<string,string>>}
- */
-const loadLanguageMap = async (lang) => {
-    const request = await fetch(`/app/language/${lang}.json`);
-    return await request.json();
 };
 
 /**
@@ -72,13 +71,19 @@ const translateDocument = async (lang, map) => {
  * @returns {Promise<void>}
  */
 const update = async () => {
-    const userLanguage = getSystemLanguage();
     setAppLanguageName(userLanguage);
-    const locales = await loadLanguageMap(userLanguage);
     await translateDocument(userLanguage, locales);
+};
+
+/**
+ * @param {string} locale
+ * @returns {string}
+ */
+const translate = (locale) => {
+    return locales[locale];
 };
 
 export const language = {
     update: update,
-    getSystemLanguage: getSystemLanguage
+    translate: translate
 };

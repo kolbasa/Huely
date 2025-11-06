@@ -23,11 +23,6 @@ let tracker = undefined;
 const loadTracker = async () => {
     const params = await state.getParams();
     tracker = (await trackers.list())[params.tracker];
-    dom.set('tracker', 'name', tracker.name);
-    dom.set('title', 'name', tracker.name);
-    for (let date in tracker.dates) {
-        dom.addClass(date, `fill-${tracker.dates[date]}`);
-    }
 };
 
 /**
@@ -70,7 +65,7 @@ const renderHeader = () => {
     dom.repeat('weekday', 6, {
         name: (i) => {
             if (i === MONDAY + 1) {
-                // The date is simply a known Monday.
+                // The hardcoded date is a known Monday.
                 return dateUtils.localizedWeekday('2024-03-25');
             }
             if (i === MONDAY + 2) {
@@ -80,6 +75,11 @@ const renderHeader = () => {
             if (i === MONDAY + 3) {
                 // Friday
                 return dateUtils.localizedWeekday('2024-03-29');
+            }
+            // Week starts with a Monday
+            if (MONDAY === 0 && i === MONDAY + 4) {
+                // Sunday
+                return dateUtils.localizedWeekday('2024-03-31');
             }
         },
         colspan: (i) => {
@@ -180,14 +180,20 @@ const addCell = (week, day) => {
 const renderTable = async () => {
     renderHeader();
     generateRowTemplate();
+    await loadTracker();
     const weeks = generateYear();
+
     let rowFiller = {};
     for (let day = 0; day < 9; day++) {
         rowFiller[`day-${day}`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
         rowFiller[`date-${day}`] = (weekIndex) => addCell(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
-    await loadTracker();
+
+    dom.set('tracker', 'name', tracker.name);
+    for (let date in tracker.dates) {
+        dom.addClass(date, `fill-${tracker.dates[date]}`);
+    }
 };
 
 /**
@@ -300,6 +306,8 @@ window.fill = async (type) => {
     if (type != null) {
         selected.classList.add(`fill-${type}`);
     }
+
+    window.Capacitor.Plugins.Haptics.impact();
 
     await saveTracker(date, type);
 
