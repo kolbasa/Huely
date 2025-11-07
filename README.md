@@ -20,6 +20,8 @@ The app is built on pure HTML5 + JavaScript and uses [Capacitor](https://capacit
 Simplified guide for building the Android app:
 ```bash
 npm install
+npm run icons
+npm run build
 npx cap add android
 npx can run android
 ```

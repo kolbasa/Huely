@@ -95,7 +95,7 @@ export const dateUtils = {
         }
 
         let dates = [];
-        for (let i = new Date(end); i > new Date(start); i.setDate(i.getDate() - 1)) {
+        for (let i = new Date(end); i >= new Date(start); i.setDate(i.getDate() - 1)) {
             dates.push(new Date(i));
         }
         return dates;

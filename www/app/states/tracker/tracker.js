@@ -1,5 +1,8 @@
 await import('../../app.js');
 
+import {App} from '@capacitor/app';
+import {Haptics, ImpactStyle} from '@capacitor/haptics';
+
 const {dom} = await import('../../../api/dom.js');
 const {state} = await import('../../../api/routing/state.js');
 const {states} = await import('../../../app/states/states.js');
@@ -34,7 +37,7 @@ const saveTracker = async (date, type) => {
     if (type == null) {
         delete tracker.dates[date];
     } else {
-        tracker.dates[date] = type;
+        tracker.dates[date] = [type];
     }
     await trackers.update(tracker);
 };
@@ -92,13 +95,14 @@ const renderHeader = () => {
 };
 
 /**
+ * @param {Date=} start
  * @returns {Date[][]}
  */
-const generateYear = () => {
+const generateYear = (start) => {
     /**
      * @type {Date[]}
      */
-    const days = dateUtils.getDays();
+    const days = dateUtils.getDays(start);
 
     /**
      * @type {Date[]}
@@ -181,7 +185,26 @@ const renderTable = async () => {
     renderHeader();
     generateRowTemplate();
     await loadTracker();
-    const weeks = generateYear();
+
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 364);
+
+    const firstMarker = Object.keys(tracker.dates)[0];
+    if (firstMarker != null) {
+        const firstMarkerDate = new Date(firstMarker);
+        const diffMs = new Date() - firstMarkerDate;
+        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+        if (diffDays > 364) {
+            startDate = firstMarkerDate;
+        }
+    }
+
+    const firstDayInWeek = dateUtils.firstDayInWeek();
+    while (startDate.getDay() !== firstDayInWeek) {
+        startDate.setDate(startDate.getDate() - 1);
+    }
+
+    const weeks = generateYear(startDate);
 
     let rowFiller = {};
     for (let day = 0; day < 9; day++) {
@@ -192,7 +215,7 @@ const renderTable = async () => {
 
     dom.set('tracker', 'name', tracker.name);
     for (let date in tracker.dates) {
-        dom.addClass(date, `fill-${tracker.dates[date]}`);
+        dom.addClass(date, `fill-${tracker.dates[date][0]}`);
     }
 };
 
@@ -200,9 +223,9 @@ const renderTable = async () => {
  * @returns {void}
  */
 window.load = async () => {
-    backButtonListener();
+    await backButtonListener();
     bodyClickListener();
-    resumeListener();
+    await resumeListener();
     await renderTable();
 };
 
@@ -225,12 +248,10 @@ const onResume = async (status) => {
 };
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const resumeListener = () => {
-    if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'appStateChange', onResume);
-    }
+const resumeListener = async () => {
+    await App.addListener('appStateChange', onResume);
 };
 
 /* ------------------------------------------------------ */
@@ -307,7 +328,7 @@ window.fill = async (type) => {
         selected.classList.add(`fill-${type}`);
     }
 
-    window.Capacitor.Plugins.Haptics.impact();
+    await Haptics.impact({style: ImpactStyle.Light});
 
     await saveTracker(date, type);
 
@@ -378,7 +399,6 @@ window.onSelect = async (element) => {
  */
 window.goToTrackerList = async () => {
     dom.hide('c3');
-    dom.show('loading');
     await router.go(states.START);
 };
 
@@ -394,10 +414,8 @@ const onBackButton = async () => {
 };
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const backButtonListener = () => {
-    if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'backButton', onBackButton);
-    }
+const backButtonListener = async () => {
+    await App.addListener('backButton', onBackButton);
 };

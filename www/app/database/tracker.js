@@ -11,7 +11,7 @@ export class Tracker {
     created;
 
     /**
-     * @type {Object.<string, number>}
+     * @type {Object.<string, [number, string?]>}
      */
     dates = {};
 

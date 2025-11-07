@@ -21,9 +21,10 @@ const serialize = async (trackers) => {
 const deserialize = async () => {
     const entries = await storage.get(STORAGE_KEY);
     let trackers = (typeof entries === 'string') ? JSON.parse(entries) : [];
-    return trackers.map((tracker) => {
-        return new Tracker(tracker);
-    });
+
+    let result = trackers.map((tracker) => new Tracker(tracker));
+    result = await migrateTo110(result);
+    return result;
 };
 
 /**
@@ -59,6 +60,28 @@ const update = async (tracker) => {
 const remove = async (tracker) => {
     let trackers = await deserialize();
     trackers = trackers.filter(entry => entry.created !== tracker.created);
+    await serialize(trackers);
+    return trackers;
+};
+
+/**
+ * Data migration: 1.0.3 -> 1.1.0
+ *
+ * @param {Array<Tracker>} trackers
+ * @returns {Promise<Array<Tracker>>}
+ */
+const migrateTo110 = async (trackers) => {
+    for (let i in trackers) {
+        const tracker = trackers[i];
+        for (let date in tracker.dates) {
+            const marker = tracker.dates[date];
+            if (typeof marker === 'object') {
+                return trackers; // already migrated -> abort
+            }
+            // noinspection JSValidateTypes
+            tracker.dates[date] = [marker];
+        }
+    }
     await serialize(trackers);
     return trackers;
 };

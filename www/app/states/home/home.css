@@ -2,6 +2,11 @@
 /*                       Main Page                        */
 /* ------------------------------------------------------ */
 
+div.c2 {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
 button.add-tracker {
     padding: 10px;
     border-radius: 50%;

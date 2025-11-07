@@ -1,6 +1,11 @@
 await import('../../app.js');
 
+import { App } from '@capacitor/app';
+import { Toast } from '@capacitor/toast';
+import { StatusBar, Animation } from '@capacitor/status-bar';
+
 const {dom} = await import('../../../api/dom.js');
+const {state} = await import('../../../api/routing/state.js');
 const {states} = await import('../../../app/states/states.js');
 const {router} = await import('../../../api/routing/router.js');
 const {trackers} = await import('../../database/trackers.js');
@@ -24,15 +29,6 @@ const refreshList = async () => {
     list.forEach(addLongPressEventListener);
 };
 
-/**
- * @param {string} locale
- */
-const showToast = (locale) => {
-    if (window.Capacitor != null) {
-        window.Capacitor.Plugins.Toast.show({text: language.translate(locale)});
-    }
-};
-
 let waitingFor;
 
 /**
@@ -44,10 +40,12 @@ const onBackButton = async () => {
         return;
     }
 
-    showToast('PRESS_AGAIN_TO_EXIT');
+    await Toast.show({
+        text: language.translate('PRESS_AGAIN_TO_EXIT'),
+    });
 
     if (waitingFor != null) {
-        return window.Capacitor.Plugins.App.exitApp()
+        return await App.exitApp();
     }
 
     waitingFor = setTimeout(() => {
@@ -56,21 +54,17 @@ const onBackButton = async () => {
 };
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const backButtonListener = () => {
-    if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'backButton', onBackButton);
-    }
+const backButtonListener = async () => {
+    await App.addListener('backButton', onBackButton);
 };
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const stateChangeListener = () => {
-    if (window.Capacitor != null) {
-        window.Capacitor.addListener('App', 'appStateChange', window.closeModal);
-    }
+const stateChangeListener = async () => {
+    await App.addListener('appStateChange', window.closeModal);
 };
 
 /**
@@ -78,8 +72,14 @@ const stateChangeListener = () => {
  */
 window.load = async () => {
     await refreshList();
-    backButtonListener();
-    stateChangeListener();
+    await backButtonListener();
+    await stateChangeListener();
+    try { // TODO: find a better solution
+        await StatusBar.hide({animation: Animation.None});
+    } catch(err) {
+        //
+    }
+    await debugReloadState();
 };
 
 /* ------------------------------------------------------ */
@@ -261,10 +261,10 @@ function browserLongPress(el, tracker) {
  */
 function addLongPressEventListener(tracker, index) {
     const trackerEl = dom.element(`t${index}`);
-    if (window.Capacitor != null) {
-        deviceLongPress(trackerEl, tracker);
-    } else {
+    if (window.Capacitor.getPlatform() === 'web') {
         browserLongPress(trackerEl, tracker);
+    } else {
+        deviceLongPress(trackerEl, tracker);
     }
 }
 
@@ -278,13 +278,19 @@ function addLongPressEventListener(tracker, index) {
  */
 window.openTracker = async (index) => {
     dom.hide('c3');
-    dom.show('loading');
     await router.go(states.TRACKER, {tracker: index});
 };
 
-// const {state} = await import('../../../api/routing/state.js');
-// const params = await state.getParams();
-// if (params != null && params['tracker'] != null) {
-//     await window.openTracker(params['tracker']);
-//     delete window.load;
-// }
+/**
+ * @returns {Promise<void>}
+ */
+const debugReloadState = async () => {
+    if (window.Capacitor.getPlatform() !== 'web') {
+        return;
+    }
+    const params = await state.getParams();
+    if (params != null && params['tracker'] != null) {
+        await window.openTracker(params['tracker']);
+        delete window.load;
+    }
+}

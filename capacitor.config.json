@@ -1,7 +1,7 @@
 {
   "appId": "de.kolbasa.huely",
   "appName": "Huely",
-  "webDir": "www",
+  "webDir": "dist",
   "server": {
     "androidScheme": "https"
   },
@@ -9,6 +9,16 @@
     "loggingBehavior": "production",
     "buildOptions": {
       "signingType": "jarsigner"
+    }
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true
+    },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 500,
+      "launchFadeOutDuration": 250
     }
   }
 }

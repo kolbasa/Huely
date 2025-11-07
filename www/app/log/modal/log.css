@@ -17,6 +17,9 @@ body {
     grid-template-rows: 42px auto;
 
     background: var(--background);
+
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .log-modal > .log-header {
