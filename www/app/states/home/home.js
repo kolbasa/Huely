@@ -3,6 +3,7 @@ await import('../../app.js');
 import {App} from '@capacitor/app';
 import {Toast} from '@capacitor/toast';
 import {StatusBar, Animation} from '@capacitor/status-bar';
+import {Haptics, ImpactStyle} from '@capacitor/haptics';
 
 const {dom} = await import('../../../api/dom.js');
 const {state} = await import('../../../api/routing/state.js');
@@ -279,7 +280,7 @@ function addLongPressEventListener(tracker, index) {
  * @returns {Promise<void>}
  */
 window.openTracker = async (index) => {
-    dom.hide('c3');
+    dom.hide('c1');
     await router.go(states.TRACKER, {tracker: index});
 };
 
@@ -297,17 +298,34 @@ const debugReloadState = async () => {
     }
 };
 
+/* ------------------------------------------------------ */
+/*                        Settings                        */
+/* ------------------------------------------------------ */
+
+/**
+ * @returns {Promise<void>}
+ */
+window.openSettings = async () => {
+    await appendDialog('settings');
+};
+
+/**
+ * @returns {Promise<void>}
+ */
 window.importData = async () => {
     await backup.import();
-    await Toast.show({
-        text: 'Erfolgreich importiert'
-    });
+    await Toast.show({text: language.translate('DATA_IMPORTED')});
+    await Haptics.impact({style: ImpactStyle.Light});
+    window.closeModal();
     location.reload();
 };
 
+/**
+ * @returns {Promise<void>}
+ */
 window.exportData = async () => {
     await backup.export();
-    await Toast.show({
-        text: 'Erfolgreich exportiert'
-    });
+    await Toast.show({text: language.translate('DATA_EXPORTED')});
+    await Haptics.impact({style: ImpactStyle.Light});
+    window.closeModal();
 };

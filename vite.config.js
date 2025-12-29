@@ -10,6 +10,7 @@ export default defineConfig({
                 create: './www/app/states/home/dialog/create/create.html',
                 delete: './www/app/states/home/dialog/delete/delete.html',
                 update: './www/app/states/home/dialog/update/update.html',
+                settings: './www/app/states/home/dialog/settings/settings.html',
                 home: './www/app/states/home/home.html',
                 tracker: './www/app/states/tracker/tracker.html',
                 log: './www/app/log/modal/log.html',
@@ -38,6 +39,10 @@ export default defineConfig({
                 {
                     src: '../www/app/states/home/dialog/delete/delete.css',
                     dest: '../dist/app/states/home/dialog/delete/'
+                },
+                {
+                    src: '../www/app/states/home/dialog/settings/settings.css',
+                    dest: '../dist/app/states/home/dialog/settings/'
                 },
                 {
                     src: '../www/app/states/home/dialog/update/update.css',

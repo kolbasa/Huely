@@ -13,7 +13,7 @@ dialog > button.close-button {
 }
 
 dialog > button.close-button > i {
-    background-color: var(--faint-1);
+    background-color: var(--faint-2);
 }
 
 /* ------------------------------------------------------ */

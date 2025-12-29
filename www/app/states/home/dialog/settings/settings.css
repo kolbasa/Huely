@@ -1,0 +1,29 @@
+dialog {
+    display: flex;
+    flex-direction: column;
+}
+
+dialog > div.controls {
+    margin-top: 25px;
+}
+
+dialog > div.controls > button {
+    max-width: inherit;
+    width: 100%;
+}
+
+dialog > div.controls > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+dialog > div.controls > div:first-child {
+    margin-top: 0;
+}
+
+dialog > div.controls > div > button {
+    background-color: transparent;
+    border: 1px solid var(--font);
+}

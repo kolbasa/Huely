@@ -18,6 +18,21 @@ button.add-tracker > i {
     width: 32px;
 }
 
+button.settings {
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 3px);
+    right: 10px;
+    background: transparent;
+}
+
+button.settings > i.icon-settings {
+    background-color: var(--faint-2);
+}
+
+button.settings:hover {
+    box-shadow: none;
+}
+
 /* ------------------------------------------------------ */
 /*                     Tracker Table                      */
 /* ------------------------------------------------------ */

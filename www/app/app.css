@@ -144,6 +144,10 @@ dialog::backdrop {
     --icon-path: url(../assets/buttons/export.svg);
 }
 
+.icon-settings {
+    --icon-path: url(../assets/buttons/settings.svg);
+}
+
 /* ------------------------------------------------------ */
 /*                         texts                          */
 /* ------------------------------------------------------ */

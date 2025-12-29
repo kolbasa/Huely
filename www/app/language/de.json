@@ -8,5 +8,9 @@
   "MORE": "Mehr",
   "NAME": "Name",
   "UNEXPECTED_ERROR_OCCURRED": "Unerwartete Fehler aufgetreten",
-  "PRESS_AGAIN_TO_EXIT": "Zum Beenden nochmals drücken"
+  "PRESS_AGAIN_TO_EXIT": "Zum Beenden nochmals drücken",
+  "EXPORT_DATA": "Daten exportieren",
+  "IMPORT_DATA": "Daten importieren",
+  "DATA_EXPORTED": "Erfolgreich exportiert",
+  "DATA_IMPORTED": "Erfolgreich importiert"
 }
