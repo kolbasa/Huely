@@ -8,7 +8,7 @@
   "android": {
     "loggingBehavior": "production",
     "buildOptions": {
-      "signingType": "jarsigner"
+      "signingType": "apksigner"
     }
   },
   "plugins": {
