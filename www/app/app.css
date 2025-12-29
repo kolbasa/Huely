@@ -121,27 +121,27 @@ dialog::backdrop {
 }
 
 .icon-add {
-    --icon-path: url(../assets/icons/add.svg);
+    --icon-path: url(../assets/buttons/add.svg);
 }
 
 .icon-trash {
-    --icon-path: url(../assets/icons/trash.svg);
+    --icon-path: url(../assets/buttons/trash.svg);
 }
 
 .icon-caret-left {
-    --icon-path: url(../assets/icons/caret-left.svg);
+    --icon-path: url(../assets/buttons/caret-left.svg);
 }
 
 .icon-x {
-    --icon-path: url(../assets/icons/close.svg);
+    --icon-path: url(../assets/buttons/close.svg);
 }
 
 .icon-import {
-    --icon-path: url(../assets/icons/import.svg);
+    --icon-path: url(../assets/buttons/import.svg);
 }
 
 .icon-export {
-    --icon-path: url(../assets/icons/export.svg);
+    --icon-path: url(../assets/buttons/export.svg);
 }
 
 /* ------------------------------------------------------ */
