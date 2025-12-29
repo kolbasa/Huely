@@ -1,9 +1,12 @@
 # Huely
 
-![Icon](www/assets/favicon-light.ico)  
+<img src="assets/logo.png" alt="Logo" width="70"/>
+
 Huely is a simple habit tracker app for Android and iOS that allows you to track your progress with a Github-like contributions graph.
 
-![Icon](assets/Screenshot-1.png)&nbsp;&nbsp;&nbsp;&nbsp;![Icon](assets/Screenshot-2.png)
+<img src="assets/Screenshot-1.png" alt="Logo" width="250"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="assets/Screenshot-2.png" alt="Logo" width="250"/>
 
 ## Features
 

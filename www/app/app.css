@@ -136,6 +136,14 @@ dialog::backdrop {
     --icon-path: url(../assets/icons/close.svg);
 }
 
+.icon-import {
+    --icon-path: url(../assets/icons/import.svg);
+}
+
+.icon-export {
+    --icon-path: url(../assets/icons/export.svg);
+}
+
 /* ------------------------------------------------------ */
 /*                         texts                          */
 /* ------------------------------------------------------ */
@@ -265,7 +273,7 @@ button.icon-button {
 /* -------------------- back button --------------------- */
 
 button.back-button {
-    position: absolute;
+    position: fixed;
     top: 1px;
     left: 2px;
     padding: 2px;

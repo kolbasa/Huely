@@ -47,24 +47,10 @@ const saveTracker = async (date, type) => {
 /* ------------------------------------------------------ */
 
 /**
- * @type {number}
- */
-const WEEK_DAY_START = dateUtils.firstDayInWeek();
-
-/**
- * @type {number}
- */
-const WEEK_DAY_END = dateUtils.getWeekdayEnd(WEEK_DAY_START);
-
-/**
- * @type {number}
- */
-const MONDAY = dateUtils.getMonday(WEEK_DAY_START);
-
-/**
  * @returns {void}
  */
 const renderHeader = () => {
+    const MONDAY = dateUtils.getMonday(dateUtils.firstDayInWeek());
     dom.repeat('weekday', 6, {
         name: (i) => {
             if (i === MONDAY + 1) {
@@ -114,8 +100,9 @@ const generateYear = (start) => {
      */
     let weeks = [week];
 
+    const weekDayEnd = dateUtils.getWeekdayEnd(dateUtils.firstDayInWeek());
     days.forEach((day, i) => {
-        if (day.getDay() === WEEK_DAY_END && i < (days.length - 1)) {
+        if (day.getDay() === weekDayEnd && i < (days.length - 1)) {
             week = [];
             weeks.push(week);
         }

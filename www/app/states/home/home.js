@@ -1,8 +1,8 @@
 await import('../../app.js');
 
-import { App } from '@capacitor/app';
-import { Toast } from '@capacitor/toast';
-import { StatusBar, Animation } from '@capacitor/status-bar';
+import {App} from '@capacitor/app';
+import {Toast} from '@capacitor/toast';
+import {StatusBar, Animation} from '@capacitor/status-bar';
 
 const {dom} = await import('../../../api/dom.js');
 const {state} = await import('../../../api/routing/state.js');
@@ -10,6 +10,8 @@ const {states} = await import('../../../app/states/states.js');
 const {router} = await import('../../../api/routing/router.js');
 const {trackers} = await import('../../database/trackers.js');
 const {language} = await import('../../../api/language.js');
+
+const {backup} = await import('../../database/import-export.js');
 
 /* ------------------------------------------------------ */
 /*                      Tracker List                      */
@@ -41,7 +43,7 @@ const onBackButton = async () => {
     }
 
     await Toast.show({
-        text: language.translate('PRESS_AGAIN_TO_EXIT'),
+        text: language.translate('PRESS_AGAIN_TO_EXIT')
     });
 
     if (waitingFor != null) {
@@ -76,7 +78,7 @@ window.load = async () => {
     await stateChangeListener();
     try { // TODO: find a better solution
         await StatusBar.hide({animation: Animation.None});
-    } catch(err) {
+    } catch (err) {
         //
     }
     await debugReloadState();
@@ -101,7 +103,7 @@ let removeDialog = undefined;
  * @returns {Promise<void>}
  */
 const appendDialog = async (type) => {
-    await window.closeModal();
+    window.closeModal();
     removeDialog = await dom.appendToBody(
         `./dialog/${type}/${type}.html`,
         `./dialog/${type}/${type}.css`
@@ -293,4 +295,19 @@ const debugReloadState = async () => {
         await window.openTracker(params['tracker']);
         delete window.load;
     }
-}
+};
+
+window.importData = async () => {
+    await backup.import();
+    await Toast.show({
+        text: 'Erfolgreich importiert'
+    });
+    location.reload();
+};
+
+window.exportData = async () => {
+    await backup.export();
+    await Toast.show({
+        text: 'Erfolgreich exportiert'
+    });
+};

@@ -3,7 +3,7 @@ export const storage = {
     /**
      * @param {string} key
      * @param {string} data
-     * @returns {void}
+     * @returns {Promise<void>}
      */
     set: async (key, data) => {
         localStorage.setItem(key, data);

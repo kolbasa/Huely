@@ -4,12 +4,14 @@ export const dateUtils = {
      * @returns {number}
      */
     firstDayInWeek: () => {
-        const lang = window.navigator.language;
+        let lang = window.navigator.language;
+        // lang = 'en-US';
+        const locale = new Intl.Locale(lang);
         let firstDay = 0;
-        try {
-            firstDay = new Intl.Locale(lang)['weekInfo']['firstDay'];
-        } catch (err) {
-            //
+        if (locale['getWeekInfo'] != null) {
+            firstDay = locale['getWeekInfo']()['firstDay'];
+        } else if (locale['weekInfo'] != null) {
+            firstDay = locale['weekInfo']['firstDay'];
         }
         if (firstDay > 6) {
             return 0;
@@ -99,6 +101,25 @@ export const dateUtils = {
             dates.push(new Date(i));
         }
         return dates;
+    },
+
+    /**
+     * @returns {string}
+     */
+    filenameFriendlyDate: () => {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        // Format: YYYY-MM-DD__HH-MM-SS
+        return `${year}-${month}-${day}__${hours}-${minutes}-${seconds}`;
     }
+
 
 };
