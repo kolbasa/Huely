@@ -4,7 +4,7 @@
 
 Huely is a simple habit tracker app for Android and iOS that allows you to track your progress with a Github-like contributions graph.
 
-<img src="assets/Screenshot-1.png" alt="Logo" width="250"/> <img src="assets/Screenshot-2.png" alt="Logo" width="250"/>
+<img src="assets/Screenshot-1.png" alt="Logo" width="250"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/Screenshot-2.png" alt="Logo" width="250"/>
 
 ## Features
 
