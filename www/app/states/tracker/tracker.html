@@ -4,9 +4,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Huely</title>
-        <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link rel="icon" href="../../../assets/favicon-light.ico" type="image/x-icon" media="(prefers-color-scheme: light)">
-        <link rel="icon" href="../../../assets/favicon-dark.ico" type="image/x-icon" media="(prefers-color-scheme: dark)">
+        <meta name="viewport"
+              content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="icon" href="../../../assets/favicon-light.ico" type="image/x-icon"
+              media="(prefers-color-scheme: light)">
+        <link rel="icon" href="../../../assets/favicon-dark.ico" type="image/x-icon"
+              media="(prefers-color-scheme: dark)">
         <link rel="stylesheet" href="../../../app/app.css">
         <link rel="stylesheet" href="../../../app/states/tracker/tracker.css">
         <script type="module" src="../../../app/states/tracker/tracker.js"></script>
@@ -36,14 +39,15 @@
                     </thead>
                     <tbody>
                         <tr class="week hidden">
-                            <td class="day hidden {{date}}" onclick="onSelect(this)">
-                                {{day}}
+                            <td class="day {{date}} {{cell}} hidden" onclick="onSelect(this)">
+                                <span class="note {{date}} {{note}}"></span>
+                                <span>{{month}}</span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 
-                <div class="color-picker hidden">
+                <div class="cell-editor hidden">
                     <div class="date">{{date}}</div>
                     <div class="controls">
                         <div lang="LESS"></div>
@@ -54,6 +58,11 @@
                         <div class="color fill-4" onclick="fill(4)"></div>
                         <div lang="MORE"></div>
                     </div>
+                    <form class="notes" onsubmit="return false;">
+                        <label>
+                            <input class="entry-notes" placeholder="NOTES" name="notes" type="text"/>
+                        </label>
+                    </form>
                 </div>
             
             </div>

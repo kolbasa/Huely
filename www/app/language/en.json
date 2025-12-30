@@ -12,5 +12,6 @@
   "EXPORT_DATA": "Export data",
   "IMPORT_DATA": "Import data",
   "DATA_EXPORTED": "Successfully exported",
-  "DATA_IMPORTED": "Successfully imported"
+  "DATA_IMPORTED": "Successfully imported",
+  "NOTES": "Notes"
 }

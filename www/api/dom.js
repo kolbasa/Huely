@@ -202,6 +202,18 @@ export const dom = {
 
     /**
      * @param {string} className
+     * @returns {string|undefined}
+     */
+    getValue: (className) => {
+        const el = _element(className);
+        if (el == null) {
+            return;
+        }
+        return el.value;
+    },
+
+    /**
+     * @param {string} className
      * @returns {void}
      */
     focus: (className) => {

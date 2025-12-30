@@ -30,14 +30,18 @@ const loadTracker = async () => {
 
 /**
  * @param {string} date
- * @param {1|2|3|4} type
+ * @param {1|2|3|4|undefined} type
+ * @param {string} notes
  * @returns {Promise<void>}
  */
-const saveTracker = async (date, type) => {
-    if (type == null) {
+const saveTracker = async (date, type, notes) => {
+    if (type == null && notes == null) {
         delete tracker.dates[date];
     } else {
         tracker.dates[date] = [type];
+        if (notes != null) {
+            tracker.dates[date].push(notes);
+        }
     }
     await trackers.update(tracker);
 };
@@ -121,11 +125,17 @@ const generateYear = (start) => {
  */
 const generateRowTemplate = () => {
     dom.repeat('day', 9, {
-        day: (index) => {
-            return `{{day-${index}}}`;
+        month: (index) => {
+            return `{{month-${index}}}`;
         },
         date: (index) => {
             return `{{date-${index}}}`;
+        },
+        cell: (index) => {
+            return `{{cell-${index}}}`;
+        },
+        note: (index) => {
+            return `{{note-${index}}}`;
         }
     });
 };
@@ -153,16 +163,40 @@ const addMonthLabel = (week, day) => {
  * @param {number} day
  * @returns {string}
  */
-const addCell = (week, day) => {
+const addDate = (week, day) => {
+    let date = '';
+    if (week[day - 1] != null) {
+        date = dateUtils.isoDateWithoutTime(week[day - 1]);
+    }
+    return date;
+};
+
+/**
+ * @param {Date[]} week
+ * @param {number} day
+ * @returns {string}
+ */
+const addActive = (week, day) => {
     if (day === 0) {
         return 'month';
     }
-    const isActive = week[day - 1] != null;
-    let date = '';
-    if (isActive) {
-        date = dateUtils.isoDateWithoutTime(week[day - 1]);
+    return week[day - 1] != null ? 'active' : '';
+};
+
+/**
+ * @param {Date[]} week
+ * @param {number} day
+ * @returns {string|undefined}
+ */
+const addNote = (week, day) => {
+    if (week[day - 1] != null) {
+        const date = dateUtils.isoDateWithoutTime(week[day - 1]);
+        const entry = tracker.dates[date];
+        if (entry != null && entry[1] != null) {
+            return;
+        }
     }
-    return `${date}${isActive ? ' active' : ''}`;
+    return 'hidden';
 };
 
 /**
@@ -195,14 +229,16 @@ const renderTable = async () => {
 
     let rowFiller = {};
     for (let day = 0; day < 9; day++) {
-        rowFiller[`day-${day}`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
-        rowFiller[`date-${day}`] = (weekIndex) => addCell(weeks[weekIndex], day);
+        rowFiller[`month-${day}`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
+        rowFiller[`date-${day}`] = (weekIndex) => addDate(weeks[weekIndex], day);
+        rowFiller[`cell-${day}`] = (weekIndex) => addActive(weeks[weekIndex], day);
+        rowFiller[`note-${day}`] = (weekIndex) => addNote(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
 
     dom.set('tracker', 'name', tracker.name);
     for (let date in tracker.dates) {
-        dom.addClass(date, `fill-${tracker.dates[date][0]}`);
+        dom.addClass(`day ${date}`, `fill-${tracker.dates[date][0]}`);
     }
 };
 
@@ -228,7 +264,7 @@ const onResume = async (status) => {
     if (status == null || !status.isActive) {
         return;
     }
-    const cell = dom.element(dateUtils.isoDateWithoutTime(new Date()));
+    const cell = dom.element('day ' + dateUtils.isoDateWithoutTime(new Date()));
     if (cell == null) { // a new day has begun.
         await renderTable();
     }
@@ -251,12 +287,54 @@ const resumeListener = async () => {
 let selected = undefined;
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-const reset = () => {
+const reset = async () => {
+    await saveNotes();
     selected = undefined;
     dom.purgeClass('selected');
-    dom.hide('color-picker');
+    dom.hide('cell-editor');
+};
+
+/**
+ * @returns {Promise<void>}
+ */
+const saveNotes = async () => {
+    if (selected == null) {
+        return;
+    }
+
+    const date = getElementDate(selected);
+    if (date == null) {
+        return;
+    }
+
+    let notes = dom.getValue('entry-notes');
+    if (notes == null) {
+        return;
+    }
+
+    notes = notes.trim()
+    if (notes.length === 0) {
+        notes = undefined;
+    }
+
+    let entry = tracker.dates[date];
+
+    let savedType = entry == null ? undefined : entry[0];
+    let savedNotes = entry == null ? undefined : entry[1];
+
+    if (notes === savedNotes) {
+        return;
+    }
+
+    await saveTracker(date, savedType, notes);
+
+    if (notes == null) {
+        dom.hide(`note ${date}`);
+    } else {
+        dom.show(`note ${date}`);
+    }
 };
 
 /**
@@ -267,9 +345,9 @@ const onBodyClick = (event) => {
         return;
     }
     ['c1', 'c2', 'c3', 'tracker', 'month', 'weekday']
-        .forEach((cl) => {
+        .forEach(async (cl) => {
             if (event.target['classList'].contains(cl)) {
-                reset();
+                await reset();
             }
         });
 };
@@ -287,7 +365,6 @@ const getElementDate = (element) => {
     });
     return date;
 };
-
 
 /**
  * @returns {void}
@@ -317,9 +394,9 @@ window.fill = async (type) => {
 
     await Haptics.impact({style: ImpactStyle.Light});
 
-    await saveTracker(date, type);
+    await saveTracker(date, type, (tracker.dates[date] || [])[1]);
 
-    reset();
+    await reset();
 };
 
 /**
@@ -336,11 +413,11 @@ const createPopover = (cell) => {
     /**
      * @type {HTMLElement}
      */
-    const picker = dom.element('color-picker');
-    dom.set('color-picker', 'date', dateUtils.formatDate(date));
+    const picker = dom.element('cell-editor');
+    dom.set('cell-editor', 'date', dateUtils.formatDate(date));
 
     const cellHeight = 22;
-    const popoverHeight = 70;
+    const popoverHeight = 110;
     const popoverMargin = 15;
 
     const screenCenter = window.innerHeight / 2;
@@ -353,7 +430,13 @@ const createPopover = (cell) => {
 
     const cellOffsetTop = cell.getBoundingClientRect().top + window.scrollY;
     picker.style.top = `${cellOffsetTop + popoverOffset}px`;
-    dom.show('color-picker');
+
+    const entry = tracker.dates[date];
+    if (entry != null && entry[1] != null) {
+        dom.setValue('entry-notes', entry[1]);
+    }
+
+    dom.show('cell-editor');
 };
 
 /**
@@ -364,7 +447,7 @@ window.onSelect = async (element) => {
     if (element == null) {
         return;
     }
-    reset();
+    await reset();
 
     const classList = element.classList;
     if (!classList.contains('active')) {
@@ -394,7 +477,7 @@ window.goToTrackerList = async () => {
  */
 const onBackButton = async () => {
     if (selected != null) {
-        reset();
+        await reset();
         return;
     }
     await window.goToTrackerList();

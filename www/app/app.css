@@ -185,6 +185,10 @@ form > label > input {
     box-sizing: border-box;
 }
 
+form > label > input:focus::placeholder {
+    color: transparent;
+}
+
 /* ------------------------------------------------------ */
 /*                       centering                        */
 /* ------------------------------------------------------ */

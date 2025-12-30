@@ -12,5 +12,6 @@
   "EXPORT_DATA": "Daten exportieren",
   "IMPORT_DATA": "Daten importieren",
   "DATA_EXPORTED": "Erfolgreich exportiert",
-  "DATA_IMPORTED": "Erfolgreich importiert"
+  "DATA_IMPORTED": "Erfolgreich importiert",
+  "NOTES": "Notizen"
 }

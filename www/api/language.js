@@ -4,6 +4,7 @@
  */
 const LANGUAGE = {ENGLISH: 'en', GERMAN: 'de'};
 const LANG_ATTR = 'lang';
+const PLACEHOLDER = 'placeholder';
 const DEFAULT = LANGUAGE.ENGLISH;
 
 /**
@@ -53,9 +54,7 @@ const translateDocument = async (lang, map) => {
         if (element.tagName === 'HTML') {
             return;
         }
-
         const value = element.getAttribute(LANG_ATTR);
-
         element.removeAttribute(LANG_ATTR);
         const locale = map[value];
         if (locale == null) {
@@ -64,6 +63,18 @@ const translateDocument = async (lang, map) => {
         } else {
             element.innerHTML = locale;
         }
+    });
+    const placeholder = document.querySelectorAll(`[${PLACEHOLDER}]`);
+    placeholder.forEach((element) => {
+        const value = element.getAttribute(PLACEHOLDER);
+        const locale = map[value];
+        if (locale == null) {
+            element.setAttribute(PLACEHOLDER, value);
+            console.warn('Translation missing for: "' + value + '"');
+        } else {
+            element.setAttribute(PLACEHOLDER, locale);
+        }
+
     });
 };
 
