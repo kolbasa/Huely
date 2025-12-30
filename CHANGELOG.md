@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.4.0 - 2025-29-12
+## 1.4.0 - 2025-30-12
 
 - [Added] Notes function
 
