@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.4.0 - 2025-29-12
+
+- [Added] Notes function
+
+## 1.3.0 - 2025-29-12
+
+- [Added] Export/Import data function
+
 ## 1.2.0 - 2025-11-07
 
 - [Fixed] The start week in the list was not completely filled

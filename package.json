@@ -1,6 +1,6 @@
 {
   "name": "huely",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Huely is a simple habit tracker app for Android and iOS",
   "type": "module",
   "scripts": {

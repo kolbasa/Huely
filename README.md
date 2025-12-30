@@ -11,9 +11,7 @@ Huely is a simple habit tracker app for Android and iOS that allows you to track
 - Simple, uncluttered interface
 - Github contributions style calendar
 - Light and dark design, depending on system settings
-- Support for multiple languages
-- All personal data is stored locally
-- The data can also be exported
+- All personal data is stored locally and can be exported
 
 ## Building
 
