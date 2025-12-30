@@ -11,7 +11,7 @@
   "PRESS_AGAIN_TO_EXIT": "Press again to exit",
   "EXPORT_DATA": "Export data",
   "IMPORT_DATA": "Import data",
-  "DATA_EXPORTED": "Successfully exported",
+  "DATA_EXPORTED": "Successfully exported to the Documents folder",
   "DATA_IMPORTED": "Successfully imported",
   "NOTES": "Notes"
 }

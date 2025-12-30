@@ -112,7 +112,7 @@ table > tbody > tr > td:last-of-type {
 /*                      Color Picker                      */
 /* ------------------------------------------------------ */
 
-div.cell-editor {
+div.editor {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -129,18 +129,18 @@ div.cell-editor {
     background: var(--background);
 }
 
-div.cell-editor > div.controls {
+div.editor > div.controls {
     margin-top: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-div.cell-editor > div.controls > div {
+div.editor > div.controls > div {
     margin: 0 5px;
 }
 
-div.cell-editor > div.controls > div.color {
+div.editor > div.controls > div.color {
     background: var(--fill-0);
     outline: 1px solid var(--outline);
     border-radius: 5px;
@@ -148,16 +148,20 @@ div.cell-editor > div.controls > div.color {
     height: 20px;
 }
 
+div.editor > div.controls > div.color.selected {
+    box-shadow: 0 0 0 3px red
+}
+
 /* ------------------------------------------------------ */
 /*                         Notes                          */
 /* ------------------------------------------------------ */
 
-div.cell-editor > form.notes {
+div.editor > form.notes {
     width: 100%;
     margin-top: 10px;
 }
 
-div.cell-editor > form.notes > label > input {
+div.editor > form.notes > label > input {
     text-align: center;
 }
 

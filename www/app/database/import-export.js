@@ -40,12 +40,21 @@ export async function importLocalStorage() {
 
     const file = result.files[0];
 
-    const readResult = await Filesystem.readFile({
-        path: file.path,
-        encoding: Encoding.UTF8
-    });
+    let jsonData;
 
-    const jsonData = JSON.parse(readResult.data);
+    if (file.path == null) {
+        jsonData = JSON.parse(new TextDecoder().decode(await file.blob.arrayBuffer()));
+    } else {
+        const readResult = await Filesystem.readFile({
+            path: file.path,
+            encoding: Encoding.UTF8
+        });
+        jsonData = JSON.parse(readResult.data);
+    }
+
+    if (jsonData == null) {
+        return;
+    }
 
     localStorage.clear();
 

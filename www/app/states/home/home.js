@@ -1,18 +1,17 @@
 await import('../../app.js');
 
-import {App} from '@capacitor/app';
-import {Toast} from '@capacitor/toast';
-import {StatusBar, Animation} from '@capacitor/status-bar';
-import {Haptics, ImpactStyle} from '@capacitor/haptics';
-
+const {app} = await import('../../../api/native/app.js');
 const {dom} = await import('../../../api/dom.js');
+const {toast} = await import('../../../api/native/toast.js');
 const {state} = await import('../../../api/routing/state.js');
 const {states} = await import('../../../app/states/states.js');
 const {router} = await import('../../../api/routing/router.js');
+const {backup} = await import('../../database/import-export.js');
+const {haptics} = await import('../../../api/native/haptics.js');
+const {statusbar} = await import('../../../api/native/statusbar.js');
 const {trackers} = await import('../../database/trackers.js');
 const {language} = await import('../../../api/language.js');
 
-const {backup} = await import('../../database/import-export.js');
 
 /* ------------------------------------------------------ */
 /*                      Tracker List                      */
@@ -32,42 +31,26 @@ const refreshList = async () => {
     list.forEach(addLongPressEventListener);
 };
 
-let waitingFor;
+let _waitingFor;
 
 /**
  * @returns {void}
  */
 const onBackButton = async () => {
-    if (removeDialog != null) {
-        window.closeModal();
+    if (_removeDialog != null) {
+        closeModal();
         return;
     }
 
-    await Toast.show({
-        text: language.translate('PRESS_AGAIN_TO_EXIT')
-    });
+    await toast.show('PRESS_AGAIN_TO_EXIT');
 
-    if (waitingFor != null) {
-        return await App.exitApp();
+    if (_waitingFor != null) {
+        return app.exit();
     }
 
-    waitingFor = setTimeout(() => {
-        waitingFor = null;
+    _waitingFor = setTimeout(() => {
+        _waitingFor = null;
     }, 1500);
-};
-
-/**
- * @returns {Promise<void>}
- */
-const backButtonListener = async () => {
-    await App.addListener('backButton', onBackButton);
-};
-
-/**
- * @returns {Promise<void>}
- */
-const stateChangeListener = async () => {
-    await App.addListener('appStateChange', window.closeModal);
 };
 
 /**
@@ -75,13 +58,9 @@ const stateChangeListener = async () => {
  */
 window.load = async () => {
     await refreshList();
-    await backButtonListener();
-    await stateChangeListener();
-    try { // TODO: find a better solution
-        await StatusBar.hide({animation: Animation.None});
-    } catch (err) {
-        //
-    }
+    await app.backButtonListener(onBackButton);
+    await app.stateChangeListener(closeModal);
+    await statusbar.hide();
     await debugReloadState();
 };
 
@@ -92,23 +71,21 @@ window.load = async () => {
 /**
  * @type {Tracker}
  */
-let editedTracker = undefined;
+let _editedTracker = undefined;
 
 /**
  * @type {function():void}
  */
-let removeDialog = undefined;
+let _removeDialog = undefined;
 
 /**
  * @param {string} type
  * @returns {Promise<void>}
  */
 const appendDialog = async (type) => {
-    window.closeModal();
-    removeDialog = await dom.appendToBody(
-        `./dialog/${type}/${type}.html`,
-        `./dialog/${type}/${type}.css`
-    );
+    closeModal();
+    const path = `./dialog/${type}/${type}`;
+    _removeDialog = await dom.appendToBody(`${path}.html`, `${path}.css`);
     await language.update();
     const dialog = dom.element('dialog');
     if (dialog['showModal'] == null) {
@@ -126,7 +103,7 @@ const onCreate = async (form) => {
         return;
     }
     await trackers.add(dom.sanitize(form.name));
-    window.closeModal();
+    closeModal();
     await refreshList();
 };
 
@@ -147,9 +124,9 @@ const onUpdate = async (form) => {
     if (form['name'] == null) {
         return;
     }
-    editedTracker.name = dom.sanitize(form.name);
-    await trackers.update(editedTracker);
-    window.closeModal();
+    _editedTracker.name = dom.sanitize(form.name);
+    await trackers.update(_editedTracker);
+    closeModal();
     await refreshList();
 };
 
@@ -159,7 +136,7 @@ const onUpdate = async (form) => {
  */
 const updateDialog = async (tracker) => {
     await appendDialog('update');
-    editedTracker = tracker;
+    _editedTracker = tracker;
     dom.setValue('name', tracker.name);
     dom.onFormSubmit('update', onUpdate);
 };
@@ -177,23 +154,23 @@ window.deleteDialog = async () => {
  * @returns {Promise<void>}
  */
 window.deleteTracker = async () => {
-    if (editedTracker != null) {
-        await trackers.remove(editedTracker);
+    if (_editedTracker != null) {
+        await trackers.remove(_editedTracker);
     }
-    window.closeModal();
+    closeModal();
     await refreshList();
 };
 
 /**
  * @returns {void}
  */
-window.closeModal = () => {
-    if (removeDialog == null) {
+window.closeModal = function closeModal() {
+    if (_removeDialog == null) {
         return;
     }
-    removeDialog();
-    removeDialog = undefined;
-};
+    _removeDialog();
+    _removeDialog = undefined;
+}
 
 /* ------------------------------------------------------ */
 /*                    Tracker Options                     */
@@ -202,7 +179,7 @@ window.closeModal = () => {
 /**
  * @type {number}
  */
-let optionsTimeoutId = undefined;
+let _optionsTimeoutId = undefined;
 
 
 /**
@@ -220,7 +197,7 @@ function setActive(el, active) {
  */
 function onTouchStart(tracker, el) {
     setActive(el, true);
-    optionsTimeoutId = setTimeout(async () => {
+    _optionsTimeoutId = setTimeout(async () => {
         setActive(el, false);
         await updateDialog(tracker);
     }, 900);
@@ -232,11 +209,11 @@ function onTouchStart(tracker, el) {
  */
 function onTouchEnd(el) {
     setActive(el, false);
-    if (optionsTimeoutId == null) {
+    if (_optionsTimeoutId == null) {
         return;
     }
-    clearTimeout(optionsTimeoutId);
-    optionsTimeoutId = undefined;
+    clearTimeout(_optionsTimeoutId);
+    _optionsTimeoutId = undefined;
 }
 
 /**
@@ -264,7 +241,7 @@ function browserLongPress(el, tracker) {
  */
 function addLongPressEventListener(tracker, index) {
     const trackerEl = dom.element(`t${index}`);
-    if (window.Capacitor.getPlatform() === 'web') {
+    if (app.isDebug()) {
         browserLongPress(trackerEl, tracker);
     } else {
         deviceLongPress(trackerEl, tracker);
@@ -288,7 +265,7 @@ window.openTracker = async (index) => {
  * @returns {Promise<void>}
  */
 const debugReloadState = async () => {
-    if (window.Capacitor.getPlatform() !== 'web') {
+    if (!app.isDebug()) {
         return;
     }
     const params = await state.getParams();
@@ -314,10 +291,10 @@ window.openSettings = async () => {
  */
 window.importData = async () => {
     await backup.import();
-    await Toast.show({text: language.translate('DATA_IMPORTED')});
-    await Haptics.impact({style: ImpactStyle.Light});
-    window.closeModal();
-    location.reload();
+    await toast.show('DATA_IMPORTED');
+    await haptics.light();
+    closeModal();
+    await app.reload();
 };
 
 /**
@@ -325,7 +302,7 @@ window.importData = async () => {
  */
 window.exportData = async () => {
     await backup.export();
-    await Toast.show({text: language.translate('DATA_EXPORTED')});
-    await Haptics.impact({style: ImpactStyle.Light});
-    window.closeModal();
+    await toast.show('DATA_EXPORTED');
+    await haptics.light();
+    closeModal();
 };

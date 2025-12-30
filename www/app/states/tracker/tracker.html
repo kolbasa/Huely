@@ -39,7 +39,7 @@
                     </thead>
                     <tbody>
                         <tr class="week hidden">
-                            <td class="day {{date}} {{cell}} hidden" onclick="onSelect(this)">
+                            <td class="day {{date}} {{active}} hidden" onclick="onSelect(this)">
                                 <span class="note {{date}} {{note}}"></span>
                                 <span>{{month}}</span>
                             </td>
@@ -47,7 +47,7 @@
                     </tbody>
                 </table>
                 
-                <div class="cell-editor hidden">
+                <div class="editor hidden">
                     <div class="date">{{date}}</div>
                     <div class="controls">
                         <div lang="LESS"></div>

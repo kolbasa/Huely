@@ -37,11 +37,25 @@ export const dateUtils = {
     },
 
     /**
-     * @param {string} date
+     * @param {Date|string} date
+     * @returns {string}
+     */
+    localizedMonth: (date) => {
+        if (typeof date === 'string') {
+            date = new Date(date);
+        }
+        return date.toLocaleString(window.navigator.language, {month: 'short'});
+    },
+
+    /**
+     * @param {Date|string} date
      * @returns {string}
      */
     localizedWeekday: (date) => {
-        return new Date(date).toLocaleString(window.navigator.language, {weekday: 'short'});
+        if (typeof date === 'string') {
+            date = new Date(date);
+        }
+        return date.toLocaleString(window.navigator.language, {weekday: 'short'});
     },
 
     /**

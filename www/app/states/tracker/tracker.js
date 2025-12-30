@@ -1,13 +1,12 @@
 await import('../../app.js');
 
-import {App} from '@capacitor/app';
-import {Haptics, ImpactStyle} from '@capacitor/haptics';
-
 const {dom} = await import('../../../api/dom.js');
+const {app} = await import('../../../api/native/app.js');
 const {state} = await import('../../../api/routing/state.js');
 const {states} = await import('../../../app/states/states.js');
 const {string} = await import('../../../api/string.js');
 const {router} = await import('../../../api/routing/router.js');
+const {haptics} = await import('../../../api/native/haptics.js');
 const {trackers} = await import('../../database/trackers.js');
 const {dateUtils} = await import('../../../api/date.js');
 
@@ -18,14 +17,14 @@ const {dateUtils} = await import('../../../api/date.js');
 /**
  * @type {Tracker}
  */
-let tracker = undefined;
+let _tracker = undefined;
 
 /**
  * @returns {Promise<void>}
  */
 const loadTracker = async () => {
     const params = await state.getParams();
-    tracker = (await trackers.list())[params.tracker];
+    _tracker = (await trackers.list())[params.tracker];
 };
 
 /**
@@ -36,14 +35,14 @@ const loadTracker = async () => {
  */
 const saveTracker = async (date, type, notes) => {
     if (type == null && notes == null) {
-        delete tracker.dates[date];
+        delete _tracker.dates[date];
     } else {
-        tracker.dates[date] = [type];
+        _tracker.dates[date] = [type];
         if (notes != null) {
-            tracker.dates[date].push(notes);
+            _tracker.dates[date].push(notes);
         }
     }
-    await trackers.update(tracker);
+    await trackers.update(_tracker);
 };
 
 /* ------------------------------------------------------ */
@@ -121,38 +120,18 @@ const generateYear = (start) => {
 };
 
 /**
- * @returns {void}
- */
-const generateRowTemplate = () => {
-    dom.repeat('day', 9, {
-        month: (index) => {
-            return `{{month-${index}}}`;
-        },
-        date: (index) => {
-            return `{{date-${index}}}`;
-        },
-        cell: (index) => {
-            return `{{cell-${index}}}`;
-        },
-        note: (index) => {
-            return `{{note-${index}}}`;
-        }
-    });
-};
-
-/**
  * @param {Date[]} week
  * @param {number} day
- * @returns {string}
+ * @returns {string|undefined}
  */
 const addMonthLabel = (week, day) => {
     if (day !== 0 && day !== 8) {
-        return '';
+        return;
     }
-    let month = '';
+    let month;
     week.forEach((day) => {
         if (day.getDate() === 1) {
-            month = day.toLocaleString(window.navigator.language, {month: 'short'});
+            month = dateUtils.localizedMonth(day);
         }
     });
     return month;
@@ -161,10 +140,10 @@ const addMonthLabel = (week, day) => {
 /**
  * @param {Date[]} week
  * @param {number} day
- * @returns {string}
+ * @returns {string|undefined}
  */
 const addDate = (week, day) => {
-    let date = '';
+    let date;
     if (week[day - 1] != null) {
         date = dateUtils.isoDateWithoutTime(week[day - 1]);
     }
@@ -174,13 +153,13 @@ const addDate = (week, day) => {
 /**
  * @param {Date[]} week
  * @param {number} day
- * @returns {string}
+ * @returns {string|undefined}
  */
 const addActive = (week, day) => {
     if (day === 0) {
-        return 'month';
+        return;
     }
-    return week[day - 1] != null ? 'active' : '';
+    return week[day - 1] != null ? 'active' : null;
 };
 
 /**
@@ -191,12 +170,23 @@ const addActive = (week, day) => {
 const addNote = (week, day) => {
     if (week[day - 1] != null) {
         const date = dateUtils.isoDateWithoutTime(week[day - 1]);
-        const entry = tracker.dates[date];
+        const entry = _tracker.dates[date];
         if (entry != null && entry[1] != null) {
             return;
         }
     }
     return 'hidden';
+};
+
+/**
+ * @returns {void}
+ */
+const generateRowTemplate = () => {
+    const indices = {};
+    ['month', 'date', 'active', 'note'].forEach((name) => {
+        indices[name] = (index) => `{{${name}-${index}}}`;
+    });
+    dom.repeat('day', 9, indices);
 };
 
 /**
@@ -210,7 +200,7 @@ const renderTable = async () => {
     let startDate = new Date();
     startDate.setDate(startDate.getDate() - 364);
 
-    const firstMarker = Object.keys(tracker.dates)[0];
+    const firstMarker = Object.keys(_tracker.dates)[0];
     if (firstMarker != null) {
         const firstMarkerDate = new Date(firstMarker);
         const diffMs = new Date() - firstMarkerDate;
@@ -231,14 +221,14 @@ const renderTable = async () => {
     for (let day = 0; day < 9; day++) {
         rowFiller[`month-${day}`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
         rowFiller[`date-${day}`] = (weekIndex) => addDate(weeks[weekIndex], day);
-        rowFiller[`cell-${day}`] = (weekIndex) => addActive(weeks[weekIndex], day);
+        rowFiller[`active-${day}`] = (weekIndex) => addActive(weeks[weekIndex], day);
         rowFiller[`note-${day}`] = (weekIndex) => addNote(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
 
-    dom.set('tracker', 'name', tracker.name);
-    for (let date in tracker.dates) {
-        dom.addClass(`day ${date}`, `fill-${tracker.dates[date][0]}`);
+    dom.set('tracker', 'name', _tracker.name);
+    for (let date in _tracker.dates) {
+        dom.addClass(`day ${date}`, `fill-${_tracker.dates[date][0]}`);
     }
 };
 
@@ -274,7 +264,7 @@ const onResume = async (status) => {
  * @returns {Promise<void>}
  */
 const resumeListener = async () => {
-    await App.addListener('appStateChange', onResume);
+    await app.stateChangeListener(onResume);
 };
 
 /* ------------------------------------------------------ */
@@ -284,27 +274,27 @@ const resumeListener = async () => {
 /**
  * @type {HTMLElement}
  */
-let selected = undefined;
+let _selected = undefined;
 
 /**
  * @returns {Promise<void>}
  */
 const reset = async () => {
     await saveNotes();
-    selected = undefined;
+    _selected = undefined;
     dom.purgeClass('selected');
-    dom.hide('cell-editor');
+    dom.hide('editor');
 };
 
 /**
  * @returns {Promise<void>}
  */
 const saveNotes = async () => {
-    if (selected == null) {
+    if (_selected == null) {
         return;
     }
 
-    const date = getElementDate(selected);
+    const date = getElementDate(_selected);
     if (date == null) {
         return;
     }
@@ -314,12 +304,12 @@ const saveNotes = async () => {
         return;
     }
 
-    notes = notes.trim()
+    notes = notes.trim();
     if (notes.length === 0) {
         notes = undefined;
     }
 
-    let entry = tracker.dates[date];
+    let entry = _tracker.dates[date];
 
     let savedType = entry == null ? undefined : entry[0];
     let savedNotes = entry == null ? undefined : entry[1];
@@ -340,16 +330,30 @@ const saveNotes = async () => {
 /**
  * @param {Event} event
  */
-const onBodyClick = (event) => {
-    if (event.target == null) {
+const onBodyClick = async (event) => {
+    if (_selected == null) {
         return;
     }
-    ['c1', 'c2', 'c3', 'tracker', 'month', 'weekday']
-        .forEach(async (cl) => {
-            if (event.target['classList'].contains(cl)) {
-                await reset();
-            }
-        });
+
+    let node = event.target;
+    if (node == null) {
+        return;
+    }
+
+    let cls = node['classList'];
+    if (cls.contains('day') && cls.contains('active')) {
+        return;
+    }
+
+    for (let i = 0; i < 4; i++) {
+        cls = node['classList'];
+        if (cls != null && cls.contains('editor')) {
+            return;
+        }
+        node = node.parentNode;
+    }
+
+    await reset();
 };
 
 /**
@@ -377,24 +381,25 @@ const bodyClickListener = () => {
  * @param {number=} type
  */
 window.fill = async (type) => {
-    if (selected == null) {
+    if (_selected == null) {
         return;
     }
 
-    const date = getElementDate(selected);
+    const date = getElementDate(_selected);
     if (date == null) {
         return;
     }
 
-    ['fill-1', 'fill-2', 'fill-3', 'fill-4'].forEach((c) => selected.classList.remove(c));
+    ['fill-1', 'fill-2', 'fill-3', 'fill-4']
+        .forEach((c) => _selected.classList.remove(c));
 
     if (type != null) {
-        selected.classList.add(`fill-${type}`);
+        _selected.classList.add(`fill-${type}`);
     }
 
-    await Haptics.impact({style: ImpactStyle.Light});
+    await haptics.light();
 
-    await saveTracker(date, type, (tracker.dates[date] || [])[1]);
+    await saveTracker(date, type, (_tracker.dates[date] || [])[1]);
 
     await reset();
 };
@@ -413,15 +418,14 @@ const createPopover = (cell) => {
     /**
      * @type {HTMLElement}
      */
-    const picker = dom.element('cell-editor');
-    dom.set('cell-editor', 'date', dateUtils.formatDate(date));
+    const picker = dom.element('editor');
+    dom.set('editor', 'date', dateUtils.formatDate(date));
 
     const cellHeight = 22;
     const popoverHeight = 110;
     const popoverMargin = 15;
 
-    const screenCenter = window.innerHeight / 2;
-    const topHalfScreen = cell.offsetTop < screenCenter;
+    const topHalfScreen = cell.offsetTop < 150;
 
     const offsetTopHalfScreen = cellHeight + popoverMargin;
     const offsetBottomHalfScreen = -(popoverHeight + popoverMargin);
@@ -431,12 +435,16 @@ const createPopover = (cell) => {
     const cellOffsetTop = cell.getBoundingClientRect().top + window.scrollY;
     picker.style.top = `${cellOffsetTop + popoverOffset}px`;
 
-    const entry = tracker.dates[date];
+    const entry = _tracker.dates[date];
     if (entry != null && entry[1] != null) {
         dom.setValue('entry-notes', entry[1]);
     }
 
-    dom.show('cell-editor');
+    if (entry != null && entry[0] != null) {
+        dom.addClass(`color fill-${entry[0]}`, 'selected');
+    }
+
+    dom.show('editor');
 };
 
 /**
@@ -453,12 +461,11 @@ window.onSelect = async (element) => {
     if (!classList.contains('active')) {
         return;
     }
-    selected = element;
+    _selected = element;
     classList.add('selected');
 
     createPopover(element);
 };
-
 
 /* ------------------------------------------------------ */
 /*                        Routing                         */
@@ -476,7 +483,7 @@ window.goToTrackerList = async () => {
  * @returns {Promise<void>}
  */
 const onBackButton = async () => {
-    if (selected != null) {
+    if (_selected != null) {
         await reset();
         return;
     }
@@ -487,5 +494,5 @@ const onBackButton = async () => {
  * @returns {Promise<void>}
  */
 const backButtonListener = async () => {
-    await App.addListener('backButton', onBackButton);
+    await app.backButtonListener(onBackButton);
 };
