@@ -6,8 +6,8 @@ const DEFAULT = LANGUAGE.ENGLISH;
 const LANG_ATTR = 'lang';
 const PLACEHOLDER = 'placeholder';
 
-// const DEVICE_LANGUAGE = window.navigator.language;
-const DEVICE_LANGUAGE = 'de-DE';
+const DEVICE_LANGUAGE = window.navigator.language;
+// const DEVICE_LANGUAGE = 'de-DE';
 // const DEVICE_LANGUAGE = 'en-US';
 // const DEVICE_LANGUAGE = 'fa-IR';
 
