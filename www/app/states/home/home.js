@@ -95,9 +95,11 @@ window.openTracker = async (index) => {
 };
 
 /**
+ * Only for desktop/debug use.
+ *
  * @returns {Promise<void>}
  */
-async function reloadStateOnDesktop() {
+async function reloadState() {
     if (!app.isDesktop()) {
         return;
     }
@@ -126,7 +128,6 @@ window.importData = async () => {
     await backup.import();
     await toast.show('DATA_IMPORTED');
     await haptics.light();
-    await modal.close();
     await app.reload();
 };
 
@@ -152,5 +153,5 @@ window.load = async () => {
     await exit.onDoubleBackButton();
     await app.stateChangeListener(modal.close);
     await statusbar.hide();
-    await reloadStateOnDesktop();
+    await reloadState();
 };
