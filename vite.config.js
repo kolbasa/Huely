@@ -6,24 +6,32 @@ export default defineConfig({
     build: {
         rollupOptions: {
             input: {
+                log: './www/app/log/modal/log.html',
                 index: './www/index.html',
+                home: './www/app/states/home/home.html',
+                error: './www/app/log/toast/error.html',
                 create: './www/app/states/home/dialog/create/create.html',
                 delete: './www/app/states/home/dialog/delete/delete.html',
                 update: './www/app/states/home/dialog/update/update.html',
-                settings: './www/app/states/home/dialog/settings/settings.html',
-                home: './www/app/states/home/home.html',
                 tracker: './www/app/states/tracker/tracker.html',
-                log: './www/app/log/modal/log.html',
-                error: './www/app/log/toast/error.html',
+                settings: './www/app/states/home/dialog/settings/settings.html',
             }
         },
         outDir: '../dist',
-        minify: false,
+        minify: true,
         emptyOutDir: true
     },
     plugins: [
         viteStaticCopy({
             targets: [
+                {
+                    src: '../www/app/language/de.json',
+                    dest: '../dist/app/language/'
+                },
+                {
+                    src: '../www/app/language/en.json',
+                    dest: '../dist/app/language/'
+                },
                 {
                     src: '../www/app/log/toast/error.css',
                     dest: '../dist/app/log/toast/'
@@ -47,14 +55,6 @@ export default defineConfig({
                 {
                     src: '../www/app/states/home/dialog/update/update.css',
                     dest: '../dist/app/states/home/dialog/update/'
-                },
-                {
-                    src: '../www/app/language/de.json',
-                    dest: '../dist/app/language/'
-                },
-                {
-                    src: '../www/app/language/en.json',
-                    dest: '../dist/app/language/'
                 }
             ]
         })
