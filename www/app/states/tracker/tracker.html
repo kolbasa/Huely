@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html lang="{{lang}}">
-    
-    <head>
-        <meta charset="UTF-8">
-        <title>Huely</title>
-        <meta name="viewport"
-              content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-        <link rel="icon" href="../../../assets/favicon-light.ico" type="image/x-icon"
-              media="(prefers-color-scheme: light)">
-        <link rel="icon" href="../../../assets/favicon-dark.ico" type="image/x-icon"
-              media="(prefers-color-scheme: dark)">
-        <link rel="stylesheet" href="../../../app/app.css">
-        <link rel="stylesheet" href="../../../app/states/tracker/tracker.css">
-        <script type="module" src="../../../app/states/tracker/tracker.js"></script>
-    </head>
-    
-    <body class="c1 hidden">
-        
-        <div class="c2">
-            
-            <div class="c3">
-                
-                <button class="back-button icon-button" onclick="goToTrackerList();">
-                    <i class="icon icon-caret-left"></i>
-                </button>
-                
-                <div class="tracker bold">
-                    {{name}}
-                </div>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="weekday hidden" colspan="{{colspan}}">
-                                {{name}}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="week hidden">
-                            <td class="day {{date}} {{active}} hidden" onclick="onSelect(this)">
-                                <span class="note {{date}} {{note}}"></span>
-                                <span>{{month}}</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="editor hidden">
-                    <div class="date">{{date}}</div>
-                    <div class="controls">
-                        <div lang="LESS"></div>
-                        <div class="color" onclick="fill()"></div>
-                        <div class="color fill-1" onclick="fill(1)"></div>
-                        <div class="color fill-2" onclick="fill(2)"></div>
-                        <div class="color fill-3" onclick="fill(3)"></div>
-                        <div class="color fill-4" onclick="fill(4)"></div>
-                        <div lang="MORE"></div>
-                    </div>
-                    <form class="notes" onsubmit="return false;">
-                        <label>
-                            <input class="entry-notes" placeholder="NOTES" name="notes" type="text"/>
-                        </label>
-                    </form>
-                </div>
-            
-            </div>
-        
+
+<head>
+    <meta charset="UTF-8">
+    <title>Huely</title>
+    <meta name="viewport"
+          content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="icon" href="../../../assets/favicon-light.ico" type="image/x-icon"
+          media="(prefers-color-scheme: light)">
+    <link rel="icon" href="../../../assets/favicon-dark.ico" type="image/x-icon"
+          media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="../../../app/app.css">
+    <link rel="stylesheet" href="../../../app/states/tracker/tracker.css">
+    <script type="module" src="../../../app/states/tracker/tracker.js"></script>
+</head>
+
+<body class="c1 hidden">
+
+<div class="c2">
+
+    <div class="c3">
+
+        <button class="back-button icon-button" onclick="goToTrackerList();">
+            <i class="icon icon-caret-left"></i>
+        </button>
+
+        <div class="tracker bold">
+            {{name}}
         </div>
-    
-    </body>
+
+        <table>
+            <thead>
+            <tr>
+                <th class="weekday hidden" colspan="{{colspan}}">
+                    {{name}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="week hidden">
+                <td class="day {{date}} {{active}} hidden" onclick="onSelect(this)">
+                    <span class="note {{date}} {{note}}"></span>
+                    <span>{{month}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="editor hidden">
+            <div class="date">{{date}}</div>
+            <div class="controls">
+                <div lang="LESS"></div>
+                <div class="color" onclick="fill()"></div>
+                <div class="color fill-1" onclick="fill(1)"></div>
+                <div class="color fill-2" onclick="fill(2)"></div>
+                <div class="color fill-3" onclick="fill(3)"></div>
+                <div class="color fill-4" onclick="fill(4)"></div>
+                <div lang="MORE"></div>
+            </div>
+            <form class="notes" onsubmit="return false;">
+                <label>
+                    <input class="entry-notes" placeholder="NOTES" name="notes" type="text"/>
+                </label>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
 
 </html>

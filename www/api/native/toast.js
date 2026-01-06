@@ -1,4 +1,5 @@
 import {Toast} from '@capacitor/toast';
+
 const {app} = await import('../../api/native/app.js');
 const {language} = await import('../../api/language.js');
 
