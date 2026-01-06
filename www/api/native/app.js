@@ -14,7 +14,7 @@ export const app = {
         if (App == null) {
             return;
         }
-        await App.exitApp()
+        await App.exitApp();
     },
 
     /**
@@ -53,7 +53,7 @@ export const app = {
         if (App == null) {
             return true;
         }
-        return window.Capacitor.getPlatform() === 'web'
+        return window.Capacitor.getPlatform() === 'web';
     }
 
 };
