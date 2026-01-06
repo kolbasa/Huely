@@ -23,7 +23,7 @@ export class Tracker {
     constructor(name, created, dates) {
         this.name = name;
         this.created = created || Date.now();
-        this.dates = dates;
+        this.dates = dates == null ? {} : dates;
     }
 
 }
