@@ -9,7 +9,7 @@ export const toast = {
      */
     show: async (message) => {
         message = language.translate(message);
-        if (app.isDebug()) {
+        if (app.isDesktop()) {
             console.log(`Toast: ${message}`);
         }
         await Toast.show({text: message});

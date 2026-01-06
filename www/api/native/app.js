@@ -32,11 +32,10 @@ export const app = {
         await App.addListener('appStateChange', fn);
     },
 
-
     /**
      * @returns {boolean}
      */
-    isDebug: () => {
+    isDesktop: () => {
         return window.Capacitor.getPlatform() === 'web'
     }
 
