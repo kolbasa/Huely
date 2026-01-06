@@ -1,15 +1,16 @@
+const {root} = await import('./../root.js');
 const {state} = await import('./state.js');
 
 export const router = {
 
     /**
-     * @param {State} sState
+     * @param {State} name
      * @param {*=} stateParams
      * @returns {Promise<void>}
      */
-    go: async (sState, stateParams) => {
+    go: async (name, stateParams) => {
         await state.setParams(stateParams);
-        window.location.replace(sState);
+        window.location.replace(root.path + name);
     }
 
 };

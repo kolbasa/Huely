@@ -1,6 +1,6 @@
-const {dom} = await import('../../../api/dom.js');
-const {language} = await import('../../../api/language.js');
-const {log} = await import('../modal/log.js');
+const {dom} = await import('./../../../api/dom.js');
+const {language} = await import('./../../../api/language.js');
+const {log} = await import('./../modal/log.js');
 
 let shown = false;
 

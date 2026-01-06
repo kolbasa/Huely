@@ -1,6 +1,6 @@
-const {app} = await import('../api/native/app.js');
-const {toast} = await import('../api/native/toast.js');
-const {modal} = await import('../api/modal.js');
+const {app} = await import('./../api/native/app.js');
+const {toast} = await import('./../api/native/toast.js');
+const {modal} = await import('./../api/modal.js');
 
 /**
  * @type {Number}

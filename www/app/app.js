@@ -2,7 +2,7 @@
  * @returns {Promise<void>}
  */
 window.goHome = async () => {
-    const {router} = await import('../api/routing/router.js');
+    const {router} = await import('./../api/routing/router.js');
     const {states} = await import('./states/states.js');
     await router.go(states.START);
 };
@@ -17,7 +17,7 @@ const loader = setInterval(async () => {
     clearInterval(loader);
     try {
         const {logger} = await import('./log/logger.js');
-        const {language} = await import('../api/language.js');
+        const {language} = await import('./../api/language.js');
 
         await logger.watch();
         await language.update();

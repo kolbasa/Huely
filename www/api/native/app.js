@@ -1,4 +1,9 @@
-import {App} from '@capacitor/app';
+let App;
+try {
+    App = (await import('@capacitor/app')).App;
+} catch (e) {
+    //
+}
 
 export const app = {
 
@@ -6,6 +11,9 @@ export const app = {
      * @returns {Promise<void>}
      */
     exit: async () => {
+        if (App == null) {
+            return;
+        }
         await App.exitApp()
     },
 
@@ -21,6 +29,9 @@ export const app = {
      * @returns {Promise<void>}
      */
     backButtonListener: async (fn) => {
+        if (App == null) {
+            return;
+        }
         await App.addListener('backButton', fn);
     },
 
@@ -29,6 +40,9 @@ export const app = {
      * @returns {Promise<void>}
      */
     stateChangeListener: async (fn) => {
+        if (App == null) {
+            return;
+        }
         await App.addListener('appStateChange', fn);
     },
 
@@ -36,6 +50,9 @@ export const app = {
      * @returns {boolean}
      */
     isDesktop: () => {
+        if (App == null) {
+            return true;
+        }
         return window.Capacitor.getPlatform() === 'web'
     }
 

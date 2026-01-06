@@ -1,4 +1,4 @@
-const {stack} = await import('../../api/stack.js');
+const {stack} = await import('./../../api/stack.js');
 const {error} = await import('./toast/error.js');
 
 /**

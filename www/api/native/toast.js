@@ -1,7 +1,11 @@
-import {Toast} from '@capacitor/toast';
+let Toast = undefined;
+try {
+    Toast = (await import('@capacitor/toast')).Toast;
+} catch (e) {
+    //
+}
 
-const {app} = await import('../../api/native/app.js');
-const {language} = await import('../../api/language.js');
+const {language} = await import('./../../api/language.js');
 
 export const toast = {
 
@@ -10,8 +14,9 @@ export const toast = {
      */
     show: async (message) => {
         message = language.translate(message);
-        if (app.isDesktop()) {
+        if (Toast == null) {
             console.log(`Toast: ${message}`);
+            return;
         }
         await Toast.show({text: message});
     }

@@ -1,5 +1,5 @@
-const {dom} = await import('../../../api/dom.js');
-const {language} = await import('../../../api/language.js');
+const {dom} = await import('./../../../api/dom.js');
+const {language} = await import('./../../../api/language.js');
 
 const NL = '<br/>';
 const TAB = '&emsp;&emsp;';

@@ -1,4 +1,11 @@
-import {StatusBar, Animation} from '@capacitor/status-bar';
+let StatusBar, Animation;
+try {
+    const module = await import('@capacitor/status-bar');
+    StatusBar = module.StatusBar;
+    Animation = module.Animation;
+} catch (e) {
+    //
+}
 
 export const statusbar = {
 

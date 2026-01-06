@@ -1,5 +1,5 @@
 const {Tracker} = await import('./tracker.js');
-const {storage} = await import('../../api/native/storage.js');
+const {storage} = await import('./../../api/native/storage.js');
 
 /**
  * @type {string}

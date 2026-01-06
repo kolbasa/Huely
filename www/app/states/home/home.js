@@ -1,18 +1,18 @@
-await import('../../app.js');
+await import('./../../app.js');
 
-const {app} = await import('../../../api/native/app.js');
-const {dom} = await import('../../../api/dom.js');
-const {exit} = await import('../../../api/exit.js');
-const {modal} = await import('../../../api/modal.js');
-const {touch} = await import('../../../api/touch.js');
-const {toast} = await import('../../../api/native/toast.js');
-const {state} = await import('../../../api/routing/state.js');
-const {states} = await import('../../../app/states/states.js');
-const {router} = await import('../../../api/routing/router.js');
-const {backup} = await import('../../database/import-export.js');
-const {haptics} = await import('../../../api/native/haptics.js');
-const {trackers} = await import('../../database/trackers.js');
-const {statusbar} = await import('../../../api/native/statusbar.js');
+const {app} = await import('./../../../api/native/app.js');
+const {dom} = await import('./../../../api/dom.js');
+const {exit} = await import('./../../../api/exit.js');
+const {modal} = await import('./../../../api/modal.js');
+const {touch} = await import('./../../../api/touch.js');
+const {toast} = await import('./../../../api/native/toast.js');
+const {state} = await import('./../../../api/routing/state.js');
+const {states} = await import('./../../../app/states/states.js');
+const {router} = await import('./../../../api/routing/router.js');
+const {backup} = await import('./../../../api/native/import-export.js');
+const {haptics} = await import('./../../../api/native/haptics.js');
+const {trackers} = await import('./../../database/trackers.js');
+const {statusbar} = await import('./../../../api/native/statusbar.js');
 
 /* ------------------------------------------------------ */
 /*                      Tracker List                      */
@@ -41,7 +41,7 @@ async function refreshList() {
  * @returns {Promise<void>}
  */
 async function updateDialog(tracker) {
-    await modal.show('./dialog/update/');
+    await modal.show('/app/states/home/dialog/update/');
     window.tracker = tracker;
     dom.setValue('name', tracker.name);
     dom.onFormSubmit('update', async (form) => {
@@ -55,7 +55,7 @@ async function updateDialog(tracker) {
  * @returns {Promise<void>}
  */
 window.createDialog = async () => {
-    await modal.show('./dialog/create/');
+    await modal.show('/app/states/home/dialog/create/');
     setTimeout(() => dom.focus('name'), 50);
     dom.onFormSubmit('create', async (form) => {
         await trackers.add(dom.sanitize(form.name));
@@ -67,7 +67,7 @@ window.createDialog = async () => {
  * @returns {Promise<void>}
  */
 window.deleteDialog = async () => {
-    await modal.show('./dialog/delete/');
+    await modal.show('/app/states/home/dialog/delete/');
     await new Promise(resolve => setTimeout(resolve, 50));
     dom.show('dialog');
 };
@@ -118,7 +118,7 @@ async function reloadState() {
  * @returns {Promise<void>}
  */
 window.openSettings = async () => {
-    await modal.show('./dialog/settings/');
+    await modal.show('/app/states/home/dialog/settings/');
 };
 
 /**

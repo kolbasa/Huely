@@ -1,14 +1,14 @@
-await import('../../app.js');
+await import('./../../app.js');
 
-const {dom} = await import('../../../api/dom.js');
-const {app} = await import('../../../api/native/app.js');
-const {state} = await import('../../../api/routing/state.js');
-const {states} = await import('../../../app/states/states.js');
-const {string} = await import('../../../api/string.js');
-const {router} = await import('../../../api/routing/router.js');
-const {haptics} = await import('../../../api/native/haptics.js');
-const {trackers} = await import('../../database/trackers.js');
-const {dateUtils} = await import('../../../api/date.js');
+const {dom} = await import('./../../../api/dom.js');
+const {app} = await import('./../../../api/native/app.js');
+const {state} = await import('./../../../api/routing/state.js');
+const {states} = await import('./../../../app/states/states.js');
+const {string} = await import('./../../../api/string.js');
+const {router} = await import('./../../../api/routing/router.js');
+const {haptics} = await import('./../../../api/native/haptics.js');
+const {trackers} = await import('./../../database/trackers.js');
+const {dateUtils} = await import('./../../../api/date.js');
 
 /* ------------------------------------------------------ */
 /*                      Tracker Data                      */

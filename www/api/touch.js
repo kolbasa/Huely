@@ -1,5 +1,5 @@
-const {app} = await import('../api/native/app.js');
-const {dom} = await import('../api/dom.js');
+const {app} = await import('./../api/native/app.js');
+const {dom} = await import('./../api/dom.js');
 
 /**
  * @type {number}

@@ -1,11 +1,10 @@
-/**
- * @typedef {string} LANGUAGE
- * @enum {LANGUAGE}
- */
+const {root} = await import('./root.js');
+
 const LANGUAGE = {ENGLISH: 'en', GERMAN: 'de'};
+const DEFAULT = LANGUAGE.ENGLISH;
+
 const LANG_ATTR = 'lang';
 const PLACEHOLDER = 'placeholder';
-const DEFAULT = LANGUAGE.ENGLISH;
 
 /**
  * @type {LANGUAGE}
@@ -28,7 +27,7 @@ const userLanguage = (() => {
  * @type {Object.<string,string>}
  */
 const locales = await (async () => {
-    const request = await fetch(`/app/language/${userLanguage}.json`);
+    const request = await fetch(`${root.path}/app/language/${userLanguage}.json`);
     return await request.json();
 })();
 

@@ -1,7 +1,15 @@
-import {Filesystem, Directory, Encoding} from '@capacitor/filesystem';
-import {FilePicker} from '@capawesome/capacitor-file-picker';
+let FilePicker, Filesystem, Directory, Encoding;
+try {
+    FilePicker = (await import('@capawesome/capacitor-file-picker')).FilePicker;
+    const fs = await import('@capacitor/filesystem');
+    Filesystem = fs.Filesystem;
+    Directory = fs.Directory;
+    Encoding = fs.Encoding;
+} catch (e) {
+    //
+}
 
-const {dateUtils} = await import('../../api/date.js');
+const {dateUtils} = await import('./../date.js');
 
 /**
  * @returns {Promise<{filename: string}>}

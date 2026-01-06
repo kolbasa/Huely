@@ -1,3 +1,4 @@
+const {root} = await import('./root.js');
 const {string} = await import('./string.js');
 
 /**
@@ -299,10 +300,10 @@ export const dom = {
         // stylesheet first
         const stylesheet = document.createElement('link');
         stylesheet.rel = 'stylesheet';
-        stylesheet.href = stylesheetUrl;
+        stylesheet.href = root.path + stylesheetUrl;
         document.head.appendChild(stylesheet);
 
-        const request = await fetch(templateUrl);
+        const request = await fetch(root.path + templateUrl);
         const templateString = await request.text();
         const templateParent = new DOMParser().parseFromString(templateString, 'text/html');
         const template = templateParent.body.firstChild;
