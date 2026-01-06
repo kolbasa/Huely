@@ -16,19 +16,14 @@ export class Tracker {
     dates = {};
 
     /**
-     * @param {string|object} o
+     * @param {string?} name
+     * @param {number?} created
+     * @param {Object.<string, [number, string?]>?} dates
      */
-    constructor(o) {
-        if (typeof o === 'object') {
-            for (let key in o) {
-                if (this.hasOwnProperty(key)) {
-                    this[key] = o[key];
-                }
-            }
-            return;
-        }
-        this.name = o;
-        this.created = Date.now();
+    constructor(name, created, dates) {
+        this.name = name;
+        this.created = created || Date.now();
+        this.dates = dates;
     }
 
 }

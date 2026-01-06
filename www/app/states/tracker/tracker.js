@@ -22,10 +22,10 @@ let _tracker = undefined;
 /**
  * @returns {Promise<void>}
  */
-const loadTracker = async () => {
+async function loadTracker() {
     const params = await state.getParams();
     _tracker = (await trackers.list())[params.tracker];
-};
+}
 
 /**
  * @param {string} date
@@ -33,7 +33,7 @@ const loadTracker = async () => {
  * @param {string} notes
  * @returns {Promise<void>}
  */
-const saveTracker = async (date, type, notes) => {
+async function saveTracker(date, type, notes) {
     if (type == null && notes == null) {
         delete _tracker.dates[date];
     } else {
@@ -43,7 +43,7 @@ const saveTracker = async (date, type, notes) => {
         }
     }
     await trackers.update(_tracker);
-};
+}
 
 /* ------------------------------------------------------ */
 /*                     Generate Table                     */
@@ -52,7 +52,7 @@ const saveTracker = async (date, type, notes) => {
 /**
  * @returns {void}
  */
-const renderHeader = () => {
+function renderHeader() {
     const MONDAY = dateUtils.getMonday(dateUtils.firstDayInWeek());
     dom.repeat('weekday', 6, {
         name: (i) => {
@@ -81,13 +81,13 @@ const renderHeader = () => {
             return 1;
         }
     });
-};
+}
 
 /**
  * @param {Date=} start
  * @returns {Date[][]}
  */
-const generateYear = (start) => {
+function generateYear(start) {
     /**
      * @type {Date[]}
      */
@@ -117,14 +117,14 @@ const generateYear = (start) => {
     }
 
     return weeks;
-};
+}
 
 /**
  * @param {Date[]} week
  * @param {number} day
  * @returns {string|undefined}
  */
-const addMonthLabel = (week, day) => {
+function addMonthLabel(week, day) {
     if (day !== 0 && day !== 8) {
         return;
     }
@@ -135,39 +135,39 @@ const addMonthLabel = (week, day) => {
         }
     });
     return month;
-};
+}
 
 /**
  * @param {Date[]} week
  * @param {number} day
  * @returns {string|undefined}
  */
-const addDate = (week, day) => {
+function addDate(week, day) {
     let date;
     if (week[day - 1] != null) {
         date = dateUtils.isoDateWithoutTime(week[day - 1]);
     }
     return date;
-};
+}
 
 /**
  * @param {Date[]} week
  * @param {number} day
  * @returns {string|undefined}
  */
-const addActive = (week, day) => {
+function addActive(week, day) {
     if (day === 0) {
         return;
     }
     return week[day - 1] != null ? 'active' : null;
-};
+}
 
 /**
  * @param {Date[]} week
  * @param {number} day
  * @returns {string|undefined}
  */
-const addNote = (week, day) => {
+function addNote(week, day) {
     if (week[day - 1] != null) {
         const date = dateUtils.isoDateWithoutTime(week[day - 1]);
         const entry = _tracker.dates[date];
@@ -176,23 +176,23 @@ const addNote = (week, day) => {
         }
     }
     return 'hidden';
-};
+}
 
 /**
  * @returns {void}
  */
-const generateRowTemplate = () => {
+function generateRowTemplate() {
     const indices = {};
     ['month', 'date', 'active', 'note'].forEach((name) => {
         indices[name] = (index) => `{{${name}-${index}}}`;
     });
     dom.repeat('day', 9, indices);
-};
+}
 
 /**
  * @returns {Promise<void>}
  */
-const renderTable = async () => {
+async function renderTable() {
     renderHeader();
     generateRowTemplate();
     await loadTracker();
@@ -230,7 +230,7 @@ const renderTable = async () => {
     for (let date in _tracker.dates) {
         dom.addClass(`day ${date}`, `fill-${_tracker.dates[date][0]}`);
     }
-};
+}
 
 /**
  * @returns {void}
@@ -250,7 +250,7 @@ window.load = async () => {
  * @param {{isActive: boolean}} status
  * @returns {Promise<void>}
  */
-const onResume = async (status) => {
+async function onResume(status) {
     if (status == null || !status.isActive) {
         return;
     }
@@ -258,14 +258,14 @@ const onResume = async (status) => {
     if (cell == null) { // a new day has begun.
         await renderTable();
     }
-};
+}
 
 /**
  * @returns {Promise<void>}
  */
-const resumeListener = async () => {
+async function resumeListener() {
     await app.stateChangeListener(onResume);
-};
+}
 
 /* ------------------------------------------------------ */
 /*                     Color Selector                     */
@@ -279,17 +279,17 @@ let _selected = undefined;
 /**
  * @returns {Promise<void>}
  */
-const reset = async () => {
+async function reset() {
     await saveNotes();
     _selected = undefined;
     dom.purgeClass('selected');
     dom.hide('editor');
-};
+}
 
 /**
  * @returns {Promise<void>}
  */
-const saveNotes = async () => {
+async function saveNotes() {
     if (_selected == null) {
         return;
     }
@@ -325,12 +325,12 @@ const saveNotes = async () => {
     } else {
         dom.show(`note ${date}`);
     }
-};
+}
 
 /**
  * @param {Event} event
  */
-const onBodyClick = async (event) => {
+async function onBodyClick(event) {
     if (_selected == null) {
         return;
     }
@@ -354,13 +354,13 @@ const onBodyClick = async (event) => {
     }
 
     await reset();
-};
+}
 
 /**
  * @param {HTMLElement} element
  * @returns {string}
  */
-const getElementDate = (element) => {
+function getElementDate(element) {
     let date;
     element.classList.forEach((cl) => {
         if (cl.split('-').length === 3) {
@@ -368,14 +368,14 @@ const getElementDate = (element) => {
         }
     });
     return date;
-};
+}
 
 /**
  * @returns {void}
  */
-const bodyClickListener = () => {
+function bodyClickListener() {
     document.body.addEventListener('click', onBodyClick);
-};
+}
 
 /**
  * @param {number=} type
@@ -408,7 +408,7 @@ window.fill = async (type) => {
  * @param {HTMLElement} cell
  * @returns {void}
  */
-const createPopover = (cell) => {
+function createPopover(cell) {
 
     /**
      * @type {string}
@@ -445,7 +445,7 @@ const createPopover = (cell) => {
     }
 
     dom.show('editor');
-};
+}
 
 /**
  * @param {HTMLElement} element
@@ -482,17 +482,17 @@ window.goToTrackerList = async () => {
 /**
  * @returns {Promise<void>}
  */
-const onBackButton = async () => {
+async function onBackButton() {
     if (_selected != null) {
         await reset();
         return;
     }
     await window.goToTrackerList();
-};
+}
 
 /**
  * @returns {Promise<void>}
  */
-const backButtonListener = async () => {
+async function backButtonListener() {
     await app.backButtonListener(onBackButton);
-};
+}

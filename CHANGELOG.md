@@ -6,7 +6,7 @@
 
 ## 1.3.0 - 2025-29-12
 
-- [Added] Export/Import data function
+- [Added] Data import/export function
 
 ## 1.2.0 - 2025-11-07
 

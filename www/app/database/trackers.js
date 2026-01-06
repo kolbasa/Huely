@@ -22,7 +22,9 @@ const deserialize = async () => {
     const entries = await storage.get(STORAGE_KEY);
     let trackers = (typeof entries === 'string') ? JSON.parse(entries) : [];
 
-    let result = trackers.map((tracker) => new Tracker(tracker));
+    let result = trackers.map((tracker) => {
+        return new Tracker(tracker.name, tracker.created, tracker.dates);
+    });
     result = await migrateTo110(result);
     return result;
 };

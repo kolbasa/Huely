@@ -12,15 +12,12 @@ const {statusbar} = await import('../../../api/native/statusbar.js');
 const {trackers} = await import('../../database/trackers.js');
 const {language} = await import('../../../api/language.js');
 
-
-/* ------------------------------------------------------ */
-/*                      Tracker List                      */
-/* ------------------------------------------------------ */
+/* -------------------- Tracker List -------------------- */
 
 /**
  * @returns {Promise<void>}
  */
-const refreshList = async () => {
+async function refreshList() {
     const list = await trackers.list();
     dom.repeat('tracker', list.length, {
         id: (index) => index,
@@ -29,14 +26,14 @@ const refreshList = async () => {
         }
     });
     list.forEach(addLongPressEventListener);
-};
+}
 
 let _waitingFor;
 
 /**
  * @returns {void}
  */
-const onBackButton = async () => {
+async function onBackButton() {
     if (_removeDialog != null) {
         closeModal();
         return;
@@ -51,7 +48,7 @@ const onBackButton = async () => {
     _waitingFor = setTimeout(() => {
         _waitingFor = null;
     }, 1500);
-};
+}
 
 /**
  * @returns {void}
@@ -82,7 +79,7 @@ let _removeDialog = undefined;
  * @param {string} type
  * @returns {Promise<void>}
  */
-const appendDialog = async (type) => {
+async function appendDialog(type) {
     closeModal();
     const path = `./dialog/${type}/${type}`;
     _removeDialog = await dom.appendToBody(`${path}.html`, `${path}.css`);
@@ -92,20 +89,20 @@ const appendDialog = async (type) => {
         return;
     }
     dialog.showModal();
-};
+}
 
 /**
  * @param {FormData} form
  * @returns {void}
  */
-const onCreate = async (form) => {
+async function onCreate(form) {
     if (form['name'] == null) {
         return;
     }
     await trackers.add(dom.sanitize(form.name));
     closeModal();
     await refreshList();
-};
+}
 
 /**
  * @returns {Promise<void>}
@@ -120,7 +117,7 @@ window.createDialog = async () => {
  * @param {FormData} form
  * @returns {void}
  */
-const onUpdate = async (form) => {
+async function onUpdate(form) {
     if (form['name'] == null) {
         return;
     }
@@ -128,18 +125,18 @@ const onUpdate = async (form) => {
     await trackers.update(_editedTracker);
     closeModal();
     await refreshList();
-};
+}
 
 /**
  * @param {Tracker} tracker
  * @returns {Promise<void>}
  */
-const updateDialog = async (tracker) => {
+async function updateDialog(tracker) {
     await appendDialog('update');
     _editedTracker = tracker;
     dom.setValue('name', tracker.name);
     dom.onFormSubmit('update', onUpdate);
-};
+}
 
 /**
  * @returns {Promise<void>}
@@ -164,13 +161,13 @@ window.deleteTracker = async () => {
 /**
  * @returns {void}
  */
-window.closeModal = function closeModal() {
+window.closeModal = function () {
     if (_removeDialog == null) {
         return;
     }
     _removeDialog();
     _removeDialog = undefined;
-}
+};
 
 /* ------------------------------------------------------ */
 /*                    Tracker Options                     */
@@ -264,16 +261,16 @@ window.openTracker = async (index) => {
 /**
  * @returns {Promise<void>}
  */
-const debugReloadState = async () => {
+async function debugReloadState() {
     if (!app.isDebug()) {
         return;
     }
     const params = await state.getParams();
     if (params != null && params['tracker'] != null) {
-        await window.openTracker(params['tracker']);
+        await openTracker(params['tracker']);
         delete window.load;
     }
-};
+}
 
 /* ------------------------------------------------------ */
 /*                        Settings                        */
