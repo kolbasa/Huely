@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.1 - 2026-06-01
+
+- [Fixed] In some cases, days were listed under the wrong day of the week. Time zones were not taken into account correctly. 
+
 ## 1.4.0 - 2025-30-12
 
 - [Added] Notes function
