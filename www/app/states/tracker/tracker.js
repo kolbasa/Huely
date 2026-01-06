@@ -94,13 +94,9 @@ function generateYear(start) {
 
 /**
  * @param {Date[]} week
- * @param {number} day
  * @returns {string|undefined}
  */
-function addMonthLabel(week, day) {
-    if (day !== 0 && day !== 8) {
-        return;
-    }
+function addMonthLabel(week) {
     let month;
     week.forEach((day) => {
         if (day.getDate() === 1) {
@@ -128,7 +124,7 @@ function addDate(week, day) {
  * @param {number} day
  * @returns {string|undefined}
  */
-function addActive(week, day) {
+function addActiveDay(week, day) {
     if (day === 0) {
         return;
     }
@@ -180,9 +176,9 @@ async function renderTable() {
 
     let rowFiller = {};
     for (let day = 0; day < 9; day++) {
-        rowFiller[`month`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
+        rowFiller[`month`] = (weekIndex) => addMonthLabel(weeks[weekIndex]);
         rowFiller[`date-${day}`] = (weekIndex) => addDate(weeks[weekIndex], day);
-        rowFiller[`active-${day}`] = (weekIndex) => addActive(weeks[weekIndex], day);
+        rowFiller[`active-${day}`] = (weekIndex) => addActiveDay(weeks[weekIndex], day);
         rowFiller[`note-active-${day}`] = (weekIndex) => addNote(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
