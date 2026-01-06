@@ -6,6 +6,7 @@ export const dateUtils = {
     firstDayInWeek: () => {
         let lang = window.navigator.language;
         // lang = 'en-US';
+        // lang = 'fa-IR';
         const locale = new Intl.Locale(lang);
         let firstDay = 0;
         if (locale['getWeekInfo'] != null) {
@@ -48,40 +49,11 @@ export const dateUtils = {
     },
 
     /**
-     * @param {Date|string} date
-     * @returns {string}
-     */
-    localizedWeekday: (date) => {
-        if (typeof date === 'string') {
-            date = new Date(date);
-        }
-        return date.toLocaleString(window.navigator.language, {weekday: 'short'});
-    },
-
-    /**
      * @param {Date} date
      * @returns {string}
      */
     isoDateWithoutTime: (date) => {
         return date.toISOString().split('T')[0];
-    },
-
-    /**
-     * @param {number} weekdayStart
-     * @returns {number}
-     */
-    getMonday: (weekdayStart) => {
-        switch (weekdayStart) {
-            case 0: {
-                return 1;
-            }
-            case 6: {
-                return 2;
-            }
-            case 1: {
-                return 0;
-            }
-        }
     },
 
     /**

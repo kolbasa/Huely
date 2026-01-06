@@ -104,8 +104,9 @@ table > tbody > tr > td.selected {
     box-shadow: 0 0 0 3px red
 }
 
+table > tbody > tr > td:first-of-type,
 table > tbody > tr > td:last-of-type {
-    color: transparent;
+    width: 26px;
 }
 
 /* ------------------------------------------------------ */

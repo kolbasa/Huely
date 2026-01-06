@@ -31,18 +31,58 @@
                 
                 <table>
                     <thead>
-                        <tr>
-                            <th class="weekday hidden" colspan="{{colspan}}">
-                                {{name}}
-                            </th>
+                        <tr class="hidden week-starts-with-1">
+                            <th class="weekday" colspan="1"></th>
+                            <th class="weekday" colspan="2" lang="MONDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="WEDNESDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="FRIDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="SUNDAY_SHORT"></th>
+                            <th class="weekday" colspan="1"></th>
+                        </tr>
+                        <tr class="hidden week-starts-with-0">
+                            <th class="weekday" colspan="1"></th>
+                            <th class="weekday" colspan="1"></th>
+                            <th class="weekday" colspan="2" lang="MONDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="WEDNESDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="FRIDAY_SHORT"></th>
+                            <th class="weekday" colspan="1"></th>
+                        </tr>
+                        <tr class="hidden week-starts-with-6">
+                            <th class="weekday" colspan="1"></th>
+                            <th class="weekday" colspan="2" lang="SATURDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="MONDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="WEDNESDAY_SHORT"></th>
+                            <th class="weekday" colspan="2" lang="FRIDAY_SHORT"></th>
+                            <th class="weekday" colspan="1"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="week hidden">
-                            <td class="day {{date}} {{active}} hidden" onclick="onSelect(this)">
-                                <span class="note {{date}} {{note}}"></span>
-                                <span>{{month}}</span>
+                            <td>
+                                {{month}}
                             </td>
+                            <td class="day {{date-1}} {{active-1}}" onclick="onSelect(this)">
+                                <span class="note {{date-1}} {{note-active-1}}"></span>
+                            </td>
+                            <td class="day {{date-2}} {{active-2}}" onclick="onSelect(this)">
+                                <span class="note {{date-2}} {{note-active-2}}"></span>
+                            </td>
+                            <td class="day {{date-3}} {{active-3}}" onclick="onSelect(this)">
+                                <span class="note {{date-3}} {{note-active-3}}"></span>
+                            </td>
+                            <td class="day {{date-4}} {{active-4}}" onclick="onSelect(this)">
+                                <span class="note {{date-4}} {{note-active-4}}"></span>
+                            </td>
+                            <td class="day {{date-5}} {{active-5}}" onclick="onSelect(this)">
+                                <span class="note {{date-5}} {{note-active-5}}"></span>
+                            </td>
+                            <td class="day {{date-6}} {{active-6}}" onclick="onSelect(this)">
+                                <span class="note {{date-6}} {{note-active-6}}"></span>
+                            </td>
+                            <td class="day {{date-7}} {{active-7}}" onclick="onSelect(this)">
+                                <span class="note {{date-7}} {{note-active-7}}"></span>
+                            </td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>

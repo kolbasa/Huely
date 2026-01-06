@@ -52,35 +52,8 @@ async function saveTracker(date, type, notes) {
 /**
  * @returns {void}
  */
-function renderHeader() {
-    const MONDAY = dateUtils.getMonday(dateUtils.firstDayInWeek());
-    dom.repeat('weekday', 6, {
-        name: (i) => {
-            if (i === MONDAY + 1) {
-                // The hardcoded date is a known Monday.
-                return dateUtils.localizedWeekday('2024-03-25');
-            }
-            if (i === MONDAY + 2) {
-                // Wednesday
-                return dateUtils.localizedWeekday('2024-03-27');
-            }
-            if (i === MONDAY + 3) {
-                // Friday
-                return dateUtils.localizedWeekday('2024-03-29');
-            }
-            // Week starts with a Monday
-            if (MONDAY === 0 && i === MONDAY + 4) {
-                // Sunday
-                return dateUtils.localizedWeekday('2024-03-31');
-            }
-        },
-        colspan: (i) => {
-            if (i > MONDAY && i < MONDAY + 4) {
-                return 2;
-            }
-            return 1;
-        }
-    });
+function showHeader() {
+    dom.show(`week-starts-with-${dateUtils.firstDayInWeek()}`);
 }
 
 /**
@@ -179,22 +152,10 @@ function addNote(week, day) {
 }
 
 /**
- * @returns {void}
- */
-function generateRowTemplate() {
-    const indices = {};
-    ['month', 'date', 'active', 'note'].forEach((name) => {
-        indices[name] = (index) => `{{${name}-${index}}}`;
-    });
-    dom.repeat('day', 9, indices);
-}
-
-/**
  * @returns {Promise<void>}
  */
 async function renderTable() {
-    renderHeader();
-    generateRowTemplate();
+    showHeader();
     await loadTracker();
 
     let startDate = new Date();
@@ -219,10 +180,10 @@ async function renderTable() {
 
     let rowFiller = {};
     for (let day = 0; day < 9; day++) {
-        rowFiller[`month-${day}`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
+        rowFiller[`month`] = (weekIndex) => addMonthLabel(weeks[weekIndex], day);
         rowFiller[`date-${day}`] = (weekIndex) => addDate(weeks[weekIndex], day);
         rowFiller[`active-${day}`] = (weekIndex) => addActive(weeks[weekIndex], day);
-        rowFiller[`note-${day}`] = (weekIndex) => addNote(weeks[weekIndex], day);
+        rowFiller[`note-active-${day}`] = (weekIndex) => addNote(weeks[weekIndex], day);
     }
     dom.repeat('week', weeks.length, rowFiller);
 
