@@ -1,21 +1,52 @@
+import path from 'path';
+import {readdir} from 'fs/promises';
 import {defineConfig} from 'vite';
 import {viteStaticCopy} from 'vite-plugin-static-copy';
+
+/**
+ * @param {string} dir
+ * @returns {Promise<string[]>}
+ */
+async function listFilesRecursive(dir) {
+    const entries = await readdir(dir, {withFileTypes: true});
+    const files = await Promise.all(
+        entries.map(async (entry) => {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                return listFilesRecursive(fullPath);
+            } else {
+                return fullPath;
+            }
+        })
+    );
+    return files.flat();
+}
+
+let rollup = {};
+let targets = [];
+const files = await listFilesRecursive('./www');
+files.forEach((file, index) => {
+    if (file.includes('.html')) {
+        rollup[index] = file;
+    }
+    if (!file.includes('.css') && !file.includes('.json')) {
+        return;
+    }
+    let dest = file.replace(`www${path.sep}`, `dist${path.sep}`);
+    let destSplit = dest.split(path.sep);
+    destSplit.pop();
+    dest = destSplit.join(path.sep) + path.sep;
+    targets.push({
+        src: `..${path.sep}` + file,
+        dest: `..${path.sep}` + dest
+    });
+});
 
 export default defineConfig({
     root: './www/',
     build: {
         rollupOptions: {
-            input: {
-                log: './www/app/log/modal/log.html',
-                index: './www/index.html',
-                home: './www/app/states/home/home.html',
-                error: './www/app/log/toast/error.html',
-                create: './www/app/states/home/dialog/create/create.html',
-                delete: './www/app/states/home/dialog/delete/delete.html',
-                update: './www/app/states/home/dialog/update/update.html',
-                tracker: './www/app/states/tracker/tracker.html',
-                settings: './www/app/states/home/dialog/settings/settings.html',
-            }
+            input: rollup
         },
         outDir: '../dist',
         minify: true,
@@ -23,40 +54,7 @@ export default defineConfig({
     },
     plugins: [
         viteStaticCopy({
-            targets: [
-                {
-                    src: '../www/app/language/de.json',
-                    dest: '../dist/app/language/'
-                },
-                {
-                    src: '../www/app/language/en.json',
-                    dest: '../dist/app/language/'
-                },
-                {
-                    src: '../www/app/log/toast/error.css',
-                    dest: '../dist/app/log/toast/'
-                },
-                {
-                    src: '../www/app/log/modal/log.css',
-                    dest: '../dist/app/log/modal/'
-                },
-                {
-                    src: '../www/app/states/home/dialog/create/create.css',
-                    dest: '../dist/app/states/home/dialog/create/'
-                },
-                {
-                    src: '../www/app/states/home/dialog/delete/delete.css',
-                    dest: '../dist/app/states/home/dialog/delete/'
-                },
-                {
-                    src: '../www/app/states/home/dialog/settings/settings.css',
-                    dest: '../dist/app/states/home/dialog/settings/'
-                },
-                {
-                    src: '../www/app/states/home/dialog/update/update.css',
-                    dest: '../dist/app/states/home/dialog/update/'
-                }
-            ]
+            targets: targets
         })
     ]
 });

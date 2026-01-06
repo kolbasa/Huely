@@ -41,7 +41,7 @@ async function refreshList() {
  * @returns {Promise<void>}
  */
 async function updateDialog(tracker) {
-    await modal.show('/app/states/home/dialog/update/');
+    await modal.show('/app/states/home/modal/update/');
     window.tracker = tracker;
     dom.setValue('name', tracker.name);
     dom.onFormSubmit('update', async (form) => {
@@ -55,7 +55,7 @@ async function updateDialog(tracker) {
  * @returns {Promise<void>}
  */
 window.createDialog = async () => {
-    await modal.show('/app/states/home/dialog/create/');
+    await modal.show('/app/states/home/modal/create/');
     setTimeout(() => dom.focus('name'), 50);
     dom.onFormSubmit('create', async (form) => {
         await trackers.add(dom.sanitize(form.name));
@@ -67,7 +67,7 @@ window.createDialog = async () => {
  * @returns {Promise<void>}
  */
 window.deleteDialog = async () => {
-    await modal.show('/app/states/home/dialog/delete/');
+    await modal.show('/app/states/home/modal/delete/');
     await new Promise(resolve => setTimeout(resolve, 50));
     dom.show('dialog');
 };
@@ -118,7 +118,7 @@ async function reloadState() {
  * @returns {Promise<void>}
  */
 window.openSettings = async () => {
-    await modal.show('/app/states/home/dialog/settings/');
+    await modal.show('/app/states/home/modal/settings/');
 };
 
 /**
