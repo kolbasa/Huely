@@ -25,7 +25,7 @@ async function closeModal() {
  */
 async function showModal(path) {
     await closeModal();
-    path = `${path}/${path.split('/').filter(Boolean).pop()}`;
+    path = `${path}${path.split('/').filter(Boolean).pop()}`;
     _removeModal = await dom.appendToBody(`${path}.html`, `${path}.css`);
     await language.update();
     const dialog = dom.element('dialog');
