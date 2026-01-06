@@ -69,7 +69,9 @@ export const dateUtils = {
      * @returns {string}
      */
     isoDateWithoutTime: (date) => {
-        return date.toISOString().split('T')[0];
+        const tzOffset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - tzOffset * 60 * 1000);
+        return localDate.toISOString().split('T')[0];
     },
 
     /**
@@ -122,6 +124,5 @@ export const dateUtils = {
         // Format: YYYY-MM-DD__HH-MM-SS
         return `${year}-${month}-${day}__${hours}-${minutes}-${seconds}`;
     }
-
 
 };
