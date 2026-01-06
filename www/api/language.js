@@ -6,11 +6,16 @@ const DEFAULT = LANGUAGE.ENGLISH;
 const LANG_ATTR = 'lang';
 const PLACEHOLDER = 'placeholder';
 
+// const DEVICE_LANGUAGE = window.navigator.language;
+const DEVICE_LANGUAGE = 'de-DE';
+// const DEVICE_LANGUAGE = 'en-US';
+// const DEVICE_LANGUAGE = 'fa-IR';
+
 /**
- * @type {LANGUAGE}
+ * @type {string}
  */
 const userLanguage = (() => {
-    const language = window.navigator.language;
+    const language = DEVICE_LANGUAGE;
     if (language == null) {
         return DEFAULT;
     }
@@ -32,7 +37,7 @@ const locales = await (async () => {
 })();
 
 /**
- * @param {LANGUAGE} lang
+ * @param {string} lang
  * @returns {void}
  */
 const setAppLanguageName = (lang) => {
@@ -43,24 +48,23 @@ const setAppLanguageName = (lang) => {
 };
 
 /**
- * @param {LANGUAGE} lang
+ * @param {string} lang
  * @param {Object.<string,string>} map
  * @returns {Promise<void>}
  */
-const translateDocument = async (lang, map) => {
+async function translateDocument(lang, map) {
     const elements = document.querySelectorAll('[lang]');
     elements.forEach((element) => {
         if (element.tagName === 'HTML') {
             return;
         }
         const value = element.getAttribute(LANG_ATTR);
-        element.removeAttribute(LANG_ATTR);
         const locale = map[value];
         if (locale == null) {
             element.innerHTML = value;
-            console.warn('Translation missing for: "' + value + '"');
         } else {
             element.innerHTML = locale;
+            element.removeAttribute(LANG_ATTR);
         }
     });
     const placeholder = document.querySelectorAll(`[${PLACEHOLDER}]`);
@@ -69,31 +73,41 @@ const translateDocument = async (lang, map) => {
         const locale = map[value];
         if (locale == null) {
             element.setAttribute(PLACEHOLDER, value);
-            console.warn('Translation missing for: "' + value + '"');
         } else {
             element.setAttribute(PLACEHOLDER, locale);
         }
 
     });
-};
+}
 
 /**
  * @returns {Promise<void>}
  */
-const update = async () => {
+async function update() {
     setAppLanguageName(userLanguage);
     await translateDocument(userLanguage, locales);
-};
+}
 
 /**
  * @param {string} locale
  * @returns {string}
  */
-const translate = (locale) => {
+function translate(locale) {
     return locales[locale];
-};
+}
+
+/**
+ * @param {Object.<string,string>} map
+ */
+function addLocales(map) {
+    for (let i in map) {
+        locales[i] = map[i];
+    }
+}
 
 export const language = {
     update: update,
-    translate: translate
+    translate: translate,
+    addLocales: addLocales,
+    device: DEVICE_LANGUAGE
 };

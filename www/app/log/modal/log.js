@@ -8,7 +8,7 @@ const TAB = '&emsp;&emsp;';
  * @param {Array<{message: string, stack: string[]}>} log
  * @returns {string}
  */
-const format = (log) => {
+function format(log) {
     const entries = log.reverse().map((entry) => {
         const _stack = entry.stack.map((line) => {
             return `${TAB}${dom.sanitize(line)}`;
@@ -16,14 +16,14 @@ const format = (log) => {
         return `${dom.sanitize(entry.message)}${NL}${_stack.join(NL)}`;
     });
     return entries.join(NL + NL);
-};
+}
 
 /**
  * @param {string} title
  * @param {Array<{message: string, stack: string[]}>} log
  * @returns {Promise<void>}
  */
-const show = async (title, log) => {
+async function show(title, log) {
     const detach = await dom.appendToBody(
         '/app/log/modal/log.html',
         '/app/log/modal/log.css'
@@ -39,6 +39,6 @@ const show = async (title, log) => {
         detach();
         delete window.close;
     };
-};
+}
 
 export const log = {show: show};

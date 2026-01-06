@@ -8,6 +8,7 @@ const {string} = await import('./../../../api/string.js');
 const {router} = await import('./../../../api/routing/router.js');
 const {haptics} = await import('./../../../api/native/haptics.js');
 const {trackers} = await import('./../../database/trackers.js');
+const {language} = await import('../../../api/language.js');
 const {dateUtils} = await import('./../../../api/date.js');
 
 /* ------------------------------------------------------ */
@@ -50,9 +51,11 @@ async function saveTracker(date, type, notes) {
 /* ------------------------------------------------------ */
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
-function showHeader() {
+async function showHeader() {
+    language.addLocales(dateUtils.localizedWeekdays());
+    await language.update();
     dom.show(`week-starts-with-${dateUtils.firstDayInWeek()}`);
 }
 
@@ -151,7 +154,7 @@ function addNote(week, day) {
  * @returns {Promise<void>}
  */
 async function renderTable() {
-    showHeader();
+    await showHeader();
     await loadTracker();
 
     let startDate = new Date();

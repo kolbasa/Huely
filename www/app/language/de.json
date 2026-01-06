@@ -13,10 +13,5 @@
   "IMPORT_DATA": "Daten importieren",
   "DATA_EXPORTED": "Erfolgreich exportiert in den Dokumente-Ordner",
   "DATA_IMPORTED": "Erfolgreich importiert",
-  "NOTES": "Notizen",
-  "MONDAY_SHORT": "Mo",
-  "WEDNESDAY_SHORT": "Mi",
-  "FRIDAY_SHORT": "Fr",
-  "SATURDAY_SHORT": "Sa",
-  "SUNDAY_SHORT": "So"
+  "NOTES": "Notizen"
 }

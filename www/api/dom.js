@@ -18,21 +18,21 @@ let hidden = [], shown = [];
  *
  * @returns {void}
  */
-const _setAttributes = (element, placeholder, value) => {
+function setAttributes(element, placeholder, value) {
     element.getAttributeNames().forEach((attr) => {
         const attrValue = element.getAttribute(attr);
         if (attrValue.includes(placeholder)) {
             element.setAttribute(attr, string.replaceAll(attrValue, placeholder, value));
         }
     });
-};
+}
 
 /**
  * @param {string} selector
  * @param {boolean=} expectOne
  * @returns {HTMLInputElement|HTMLElement|Element[]}
  */
-const _by = (selector, expectOne) => {
+function by(selector, expectOne) {
     let elements = document.getElementsByClassName(selector);
     if (expectOne && elements.length > 1) {
         throw new Error(`Multiple "${selector}" elements found`);
@@ -42,27 +42,27 @@ const _by = (selector, expectOne) => {
         return elements[0];
     }
     return elements;
-};
+}
 
 /**
  * @param {string} selector
  * @returns {HTMLInputElement|HTMLElement|Element[]}
  */
-const _element = (selector) => _by(selector, true);
+const element = (selector) => by(selector, true);
 
 /**
  * @param {string} selector
  * @returns {HTMLInputElement|HTMLElement|Element[]}
  */
-const _elements = (selector) => _by(selector, false);
+const elements = (selector) => by(selector, false);
 
 /**
  * @param {string} selector
  * @param {Boolean=} hide
  * @returns {boolean}
  */
-const _toggleVisibility = (selector, hide) => {
-    _elements(selector).forEach((element) => {
+function toggleVisibility(selector, hide) {
+    elements(selector).forEach((element) => {
         if (hide == null) {
             hide = !element.classList.contains('hidden');
         }
@@ -81,42 +81,42 @@ const _toggleVisibility = (selector, hide) => {
         }
     }
     return hide;
-};
+}
 
 /**
  * @param {string} html
  * @param {string} selector
  */
-const _containsSelector = (html, selector) => {
+function containsSelector(html, selector) {
     selector = selector.slice(1);
     const attributes = string.getBetweenQuotationMarks(html);
     return attributes.find((attr) => attr.includes(selector)) != null;
-};
+}
 
 /**
  * @param {string} className
  * @returns {void}
  */
-const _reset = (className) => {
+function reset(className) {
     if (knownReplacements[className] == null) {
         return;
     }
 
-    const element = _by(className, true);
+    const element = by(className, true);
     element.innerHTML = knownReplacements[className];
 
     hidden.forEach((selector) => {
-        if (_containsSelector(element.innerHTML, selector)) {
-            _toggleVisibility(selector, true);
+        if (containsSelector(element.innerHTML, selector)) {
+            toggleVisibility(selector, true);
         }
     });
 
     shown.forEach((selector) => {
-        if (_containsSelector(element.innerHTML, selector)) {
-            _toggleVisibility(selector, false);
+        if (containsSelector(element.innerHTML, selector)) {
+            toggleVisibility(selector, false);
         }
     });
-};
+}
 
 /**
  * @type {{timestamp: number, renderId: number}}
@@ -127,7 +127,7 @@ let render = {};
  * @param {string} id
  * @returns {number}
  */
-const _cancelRunningRender = (id) => {
+function cancelRunningRender(id) {
     if (render[id] == null) {
         return 0;
     }
@@ -137,7 +137,7 @@ const _cancelRunningRender = (id) => {
     }
 
     return render[id].timestamp;
-};
+}
 
 export const dom = {
 
@@ -145,31 +145,31 @@ export const dom = {
      * @param {string} selector
      * @returns {HTMLInputElement|HTMLElement|Element[]}
      */
-    element: _element,
+    element: element,
 
     /**
      * @param {string} selector
      * @returns {HTMLInputElement|HTMLElement|Element[]}
      */
-    elements: _elements,
+    elements: elements,
 
     /**
      * @param {string} selector
      * @returns {boolean}
      */
-    hide: (selector) => _toggleVisibility(selector, true),
+    hide: (selector) => toggleVisibility(selector, true),
 
     /**
      * @param {string} selector
      * @returns {boolean}
      */
-    show: (selector) => _toggleVisibility(selector, false),
+    show: (selector) => toggleVisibility(selector, false),
 
     /**
      * @param {string} selector
      * @returns {void}
      */
-    remove: (selector) => _elements(selector).forEach((el) => el.remove()),
+    remove: (selector) => elements(selector).forEach((el) => el.remove()),
 
     /**
      * @returns {boolean}
@@ -181,13 +181,13 @@ export const dom = {
      * @param {string} className
      * @returns {void}
      */
-    addClass: (selector, className) => (_elements(selector).forEach((e) => e.classList.add(className))),
+    addClass: (selector, className) => (elements(selector).forEach((e) => e.classList.add(className))),
 
     /**
      * @param {string} className
      * @returns {void}
      */
-    purgeClass: (className) => (_elements(className).forEach((e) => e.classList.remove(className))),
+    purgeClass: (className) => (elements(className).forEach((e) => e.classList.remove(className))),
 
     /**
      * @param {string} className
@@ -195,7 +195,7 @@ export const dom = {
      * @returns {void}
      */
     setValue: (className, value) => {
-        const el = _element(className);
+        const el = element(className);
         if (el != null) {
             el.value = value;
         }
@@ -206,7 +206,7 @@ export const dom = {
      * @returns {string|undefined}
      */
     getValue: (className) => {
-        const el = _element(className);
+        const el = element(className);
         if (el == null) {
             return;
         }
@@ -218,7 +218,7 @@ export const dom = {
      * @returns {void}
      */
     focus: (className) => {
-        const el = _element(className);
+        const el = element(className);
         if (el != null) {
             el.focus();
         }
@@ -239,7 +239,7 @@ export const dom = {
      * @returns {void}
      */
     onFormSubmit: (className, callback) => {
-        const el = _element(className);
+        const el = element(className);
         if (el == null) {
             return;
         }
@@ -255,7 +255,7 @@ export const dom = {
      * @param {function} instruction
      */
     frameSkip: (name, instruction) => {
-        const timestamp = _cancelRunningRender(name);
+        const timestamp = cancelRunningRender(name);
         render[name] = {
             renderId: setTimeout(() => {
                 instruction();
@@ -272,23 +272,23 @@ export const dom = {
      * @returns {void}
      */
     set: function (className, name, value) {
-        const element = _element(className);
-        if (element == null) {
+        const el = element(className);
+        if (el == null) {
             return;
         }
 
-        let html = element.innerHTML;
+        let html = el.innerHTML;
         if (knownReplacements[className] == null) {
             knownReplacements[className] = html;
         }
 
         if (!html.includes(`{{${name}}}`)) { // update
-            _reset(className);
-            html = element.innerHTML;
+            reset(className);
+            html = el.innerHTML;
         }
 
         html = string.replaceAll(html, `{{${name}}}`, value);
-        element.innerHTML = html;
+        el.innerHTML = html;
     },
 
     /**
@@ -321,24 +321,24 @@ export const dom = {
      * @param {Object.<string, function(number):(String|Number)>=} map
      */
     repeat: (className, repeat, map) => {
-        const elements = _elements(className);
-        if (elements.length === 0) {
+        const els = elements(className);
+        if (els.length === 0) {
             return;
         }
 
-        elements.forEach((element, index) => {
+        els.forEach((element, index) => {
             if (index > 0) {
                 element.remove();
             }
         });
 
-        const parentNode = elements[0].parentNode;
-        const elementToRepeat = elements[0].cloneNode(true);
+        const parentNode = els[0].parentNode;
+        const elementToRepeat = els[0].cloneNode(true);
         elementToRepeat.classList.remove('hidden');
 
         // for the 'options' tag, the 'hidden' class does not work.
-        if (elements[0].tagName === 'OPTION') {
-            elements[0].remove();
+        if (els[0].tagName === 'OPTION') {
+            els[0].remove();
         }
 
         const repeats = [];
@@ -348,8 +348,8 @@ export const dom = {
 
         repeats.forEach((node, index) => {
             // inject index to function calls in parent node
-            _setAttributes(node, ')', `, ${index})`);
-            _setAttributes(node, '(, ', `(`);
+            setAttributes(node, ')', `, ${index})`);
+            setAttributes(node, '(, ', `(`);
 
             let html = node.innerHTML;
 
@@ -370,7 +370,7 @@ export const dom = {
 
                     value = value == null ? '' : value;
                     html = string.replaceAll(html, placeholder, value);
-                    _setAttributes(node, placeholder, value);
+                    setAttributes(node, placeholder, value);
                 }
             }
 

@@ -8,33 +8,37 @@ let shown = false;
  * @param {Array<{message: string, stack: string[]}>} _log
  * @returns {Promise<void>}
  */
-const updateErrorToastCount = async (_log) => {
+async function updateErrorNotificationCount(_log) {
     dom.frameSkip('notification', () => dom.set('notification', 'count', _log.length));
-};
+}
 
 /**
  * @param {Array<{message: string, stack: string[]}>} _log
  * @returns {Promise<void>}
  */
-const createErrorToast = async (_log) => {
+async function createErrorNotification(_log) {
     await dom.appendToBody(
-        '/app/log/toast/error.html',
-        '/app/log/toast/error.css'
+        '/app/log/notification/error.html',
+        '/app/log/notification/error.css'
     );
     window.showLog = async () => await log.show('UNEXPECTED_ERROR_OCCURRED', _log);
     await language.update();
-};
+}
 
 /**
  * @param {Array<{message: string, stack: string[]}>} _log
  * @returns {Promise<void>}
  */
-const show = async (_log) => {
-    if (!shown) {
-        await createErrorToast(_log);
-        shown = true;
+async function show(_log) {
+    try {
+        if (!shown) {
+            await createErrorNotification(_log);
+            shown = true;
+        }
+        await updateErrorNotificationCount(_log);
+    } catch (err) {
+        console.error(err);
     }
-    await updateErrorToastCount(_log);
-};
+}
 
 export const error = {show: show};

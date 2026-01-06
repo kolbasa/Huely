@@ -1,13 +1,12 @@
+const {language} = await import('./language.js');
+
 export const dateUtils = {
 
     /**
      * @returns {number}
      */
     firstDayInWeek: () => {
-        let lang = window.navigator.language;
-        // lang = 'en-US';
-        // lang = 'fa-IR';
-        const locale = new Intl.Locale(lang);
+        const locale = new Intl.Locale(language.device);
         let firstDay = 0;
         if (locale['getWeekInfo'] != null) {
             firstDay = locale['getWeekInfo']()['firstDay'];
@@ -26,7 +25,7 @@ export const dateUtils = {
      */
     formatDate: (date) => {
         const formatter = new Intl.DateTimeFormat(
-            window.navigator.language,
+            language.device,
             {
                 weekday: 'long',
                 year: 'numeric',
@@ -38,6 +37,23 @@ export const dateUtils = {
     },
 
     /**
+     * @returns {Object.<string,string>}
+     */
+    localizedWeekdays: () => {
+        // 2020‑01‑05 is a Sunday, a stable reference point
+        const baseDate = new Date(Date.UTC(2020, 0, 5));
+
+        const weekdays = {};
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(baseDate);
+            date.setDate(baseDate.getDate() + i);
+            const name = (date.toLocaleDateString('en', {weekday: 'long'}) + '_short').toUpperCase();
+            weekdays[name] = date.toLocaleDateString(language.device, {weekday: 'short'});
+        }
+        return weekdays;
+    },
+
+    /**
      * @param {Date|string} date
      * @returns {string}
      */
@@ -45,7 +61,7 @@ export const dateUtils = {
         if (typeof date === 'string') {
             date = new Date(date);
         }
-        return date.toLocaleString(window.navigator.language, {month: 'short'});
+        return date.toLocaleString(language.device, {month: 'short'});
     },
 
     /**
