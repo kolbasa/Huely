@@ -23,5 +23,5 @@ npm install
 npm run build
 npx cap add android
 npm run icons
-npx can run android
+npx cap run android
 ```
